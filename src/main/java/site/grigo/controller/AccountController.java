@@ -1,11 +1,11 @@
-package site.grigo.controller.account;
+package site.grigo.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import site.grigo.domain.account.SignUpForm;
-import site.grigo.service.account.AccountService;
+import site.grigo.service.AccountService;
 import site.grigo.validator.SignUpValidator;
 import javax.validation.Valid;
 
