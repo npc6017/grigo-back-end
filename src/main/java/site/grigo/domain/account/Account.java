@@ -1,4 +1,4 @@
-package site.grigo.domain;
+package site.grigo.domain.account;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -6,8 +6,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Account {
-    private Long ID;
-
     public Account(String email, String password, String name, String birth, Integer student_id, String sex, String phone) {
         this.email = email;
         this.password = password;
@@ -17,7 +15,7 @@ public class Account {
         this.sex = sex;
         this.phone = phone;
     }
-
+    private Long Id;
     private String email;
     private String password;
     private String name;
