@@ -28,4 +28,8 @@ public class AccountMemoryRepository implements AccountRepository{
     public List<Account> findAll() {
         return new ArrayList<>(store.values());
     }
+
+    public void clearStore(){
+        store.clear();
+    }
 }
