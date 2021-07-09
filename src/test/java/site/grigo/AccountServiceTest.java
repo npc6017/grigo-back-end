@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import site.grigo.domain.account.Account;
 import site.grigo.domain.account.AccountRepository;
-import site.grigo.domain.account.SignUpForm;
+import site.grigo.domain.account.SignUpJson;
 import site.grigo.service.AccountService;
 import java.util.Optional;
 
@@ -20,7 +20,7 @@ class AccountServiceTest {
     AccountRepository accountRepository;
 
     /** 테스트 계정*/
-    SignUpForm testAccount = new SignUpForm(
+    SignUpJson testAccount = new SignUpJson(
             "solchan@grigo.me",
             "12345678",
             "solchan",

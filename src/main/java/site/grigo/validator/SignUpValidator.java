@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 import site.grigo.domain.account.AccountRepository;
-import site.grigo.domain.account.SignUpForm;
+import site.grigo.domain.account.SignUpJson;
 
 @Component
 @RequiredArgsConstructor
@@ -15,7 +15,7 @@ public class SignUpValidator implements Validator {
 
     @Override
     public boolean supports(Class<?> aClass) {
-        return aClass.isAssignableFrom(SignUpForm.class);
+        return aClass.isAssignableFrom(SignUpJson.class);
     }
 
     /***
@@ -27,15 +27,15 @@ public class SignUpValidator implements Validator {
      */
     @Override
     public void validate(Object obj, Errors errors) {
-        SignUpForm signUpForm = (SignUpForm) obj;
-        if(accountRepository.existsByEmail(signUpForm.getEmail())) {
+        SignUpJson signUpJson = (SignUpJson) obj;
+        if(accountRepository.existsByEmail(signUpJson.getEmail())) {
             errors.rejectValue("email", "Invalid.email",
-                    new Object[]{signUpForm.getEmail()}, "이미 사용중인 이메일입니다.");
+                    new Object[]{signUpJson.getEmail()}, "이미 사용중인 이메일입니다.");
         }
 
-        if(accountRepository.existsByStudentNumber(signUpForm.getStudent_id())) {
+        if(accountRepository.existsByStudentNumber(signUpJson.getStudent_id())) {
             errors.rejectValue("student_id", "Invalid.student_id",
-                    new Object[]{signUpForm.getStudent_id()}, "이미 가입되어 있는 학번입니다.");
+                    new Object[]{signUpJson.getStudent_id()}, "이미 가입되어 있는 학번입니다.");
         }
     }
 }

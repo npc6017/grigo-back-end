@@ -10,10 +10,10 @@ import javax.validation.constraints.NotBlank;
 
 @Getter
 @Setter
-public class SignUpForm {
+public class SignUpJson {
 
     /** 테스트용 생성자*/
-    public SignUpForm(String email, String password, String name, String birth, Integer student_id, String sex, String phone) {
+    public SignUpJson(String email, String password, String name, String birth, Integer student_id, String sex, String phone) {
         this.email = email;
         this.password = password;
         this.name = name;
