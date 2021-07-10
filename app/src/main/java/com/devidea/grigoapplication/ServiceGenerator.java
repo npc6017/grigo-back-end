@@ -15,7 +15,12 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ServiceGenerator {
 
+    //수정해야합니다.
+    TokenManager tokenManager = new TokenManager();
+
     public JsonObject jsonObject;
+    public JsonObject jsonObjectLogin;
+
     public RetrofitService retrofitService = retrofit.create(RetrofitService.class);
     public static final String BASE_URL = "http://solac.iptime.org:1234/";
 
@@ -73,13 +78,36 @@ public class ServiceGenerator {
     }
 
     public void login() {
-        jsonObject.addProperty("email", "test@naver.com");
-        jsonObject.addProperty("password", "12345678a");
+        jsonObjectLogin = new JsonObject();
 
-        retrofitService.setPostBody(jsonObject).enqueue(new Callback<JsonObject>() {
+        jsonObjectLogin.addProperty("email", "solchan@gmail.com");
+        jsonObjectLogin.addProperty("password", "12345678");
+
+        retrofitService.login(jsonObjectLogin).enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                Headers headers = response.headers();
+                //Headers headers = response.headers();
+                //System.out.println(response.headers());
+
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Log.d("서버", "실패");
+            }
+        });
+
+
+    }
+
+    public void test() {
+        retrofitService = createService(RetrofitService.class, tokenManager.get());
+
+        retrofitService.test(jsonObjectLogin).enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                //Headers headers = response.headers();
+                System.out.println(response.body());
 
             }
 
