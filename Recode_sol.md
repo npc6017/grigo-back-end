@@ -35,7 +35,7 @@
 > 응답은 가입 검증에 걸리게 되면 JoinDTO의 상태 코드를 400(Bad Request), 에러 메세지를 담아 응답한다.  
        검증에 통과하면 상태 코드 200과 Success메세지를 담아 응답한다.  
 > response 상태 코드도 같이 설정하지만, 클라이언트에서 확인이 안된다고 하여 DTO에 추가로 넣어 응답한다.  
-> MethodArgumentNotValidException 핸들러 작성 : 작성한 검증 조건에 걸리게 되면, 예외에 걸리게 되어 이에 대한 처리 핸들러가 필요하다. 따라서 @ExceptionHandler(MethodArgumentNotValidException.class) 어노테이션을 추가한 핸들러 메서드를 작성. 
+> MethodArgumentNotValidException 핸들러 작성 : 작성한 검증 조건(객체의 @NotBlank 등)에 걸리게 되면, 예외에 걸리게 되어 이에 대한 처리 핸들러가 필요하다. 따라서 @ExceptionHandler(MethodArgumentNotValidException.class) 어노테이션을 추가한 핸들러 메서드를 작성. 
 > 
 > > - domain/ account 패키지  
        JoinDTO 작성 : 응답의 상태와 에러 메세지를 담는 DTO. 응답 상태를 넣은 이유는 클라이언트에서 응답 상태 확인이 불가능하다 하여 추가.
