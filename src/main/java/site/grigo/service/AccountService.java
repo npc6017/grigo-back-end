@@ -21,6 +21,11 @@ public class AccountService implements UserDetailsService {
         return account.get();
     }
 
+    public UserDetails loadUserByEmail(String email) throws UsernameNotFoundException {
+        Optional<UserDetails> account = accountRepository.findByEmail(email);
+        return account.get();
+    }
+
     public UserDetails save(Account account){
         return accountRepository.save(account);
     }
