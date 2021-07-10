@@ -31,4 +31,11 @@ public class AccountController {
         String token = jwtProvider.createToken(account);
         return token;
     }
+
+    @ResponseBody
+    @PostMapping("/test")
+    public String test(){
+        log.info("heelo?");
+        return "goood";
+    }
 }
