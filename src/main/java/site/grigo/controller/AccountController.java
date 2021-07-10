@@ -47,7 +47,7 @@ public class AccountController {
     }
 
     /**
-     * MethodArgumentNotValidException 핸들러,
+     * MethodArgumentNotValidException 핸들러(객체 변수 어노테이션(@NotBlank 등))
      * 해당 예외가 잡히면, Bad Request 응답코드 400과 함께 에러 메시지를 응답해준다.
      * */
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -56,7 +56,7 @@ public class AccountController {
         if(exception.hasErrors()) {
             response.setStatus(400);
             if(exception.hasFieldErrors("email")) {
-                /** 1순위. 이메일이 올바른 형식이 아닙니다. 2순위. 이메일이 중복됩니다. */
+                /** 이메일이 올바른 형식이 아닙니다. */
                 errorMessage = "이메일이 " + exception.getFieldError().getDefaultMessage();
             } else if (exception.hasFieldErrors("password")) {
                 /** 비밀번호가 8자 이상 50자 미만이어야 합니다. */
