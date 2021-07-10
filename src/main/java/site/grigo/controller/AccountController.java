@@ -24,8 +24,8 @@ public class AccountController {
     }
 
     @ResponseBody
-    @PostMapping("/logIn")
-    public String logIn(@RequestBody Account account) {
+    @PostMapping("/login")
+    public String login(@RequestBody Account account) {
         log.info("email : {}, password : {}", account.getEmail(), account.getPassword());
         //토큰을 만들기 전에, 아이디와 로그인이 맞는지부터 판별할 것.
         String token = jwtProvider.createToken(account);
