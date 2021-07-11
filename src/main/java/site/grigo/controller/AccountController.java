@@ -3,9 +3,12 @@ package site.grigo.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import site.grigo.LoginDTO;
 import site.grigo.domain.Account;
 import site.grigo.jwt.JwtProvider;
 import site.grigo.service.AccountService;
+
+import javax.servlet.http.HttpServletResponse;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -25,17 +28,18 @@ public class AccountController {
 
     @ResponseBody
     @PostMapping("/login")
-    public String login(@RequestBody Account account) {
+    public LoginDTO login(@RequestBody Account account, HttpServletResponse response) {
         log.info("email : {}, password : {}", account.getEmail(), account.getPassword());
         //토큰을 만들기 전에, 아이디와 로그인이 맞는지부터 판별할 것.
         String token = jwtProvider.createToken(account);
-        return token;
+        response.setHeader("Authorization", "bearer " + token);
+        return new LoginDTO(200);
     }
 
     @ResponseBody
     @PostMapping("/test")
-    public String test(){
+    public LoginDTO test(){
         log.info("heelo?");
-        return "goood";
+        return new LoginDTO(200, "hello?");
     }
 }
