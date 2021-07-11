@@ -5,6 +5,9 @@ import android.util.Log;
 
 import com.google.gson.JsonObject;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import okhttp3.Headers;
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
@@ -20,6 +23,7 @@ public class ServiceGenerator {
 
     public JsonObject jsonObject;
     public JsonObject jsonObjectLogin;
+    public JsonObject testJson;
 
     public RetrofitService retrofitService = retrofit.create(RetrofitService.class);
     public static final String BASE_URL = "http://solac.iptime.org:1234/";
@@ -101,22 +105,19 @@ public class ServiceGenerator {
     }
 
     public void test() {
-        retrofitService = createService(RetrofitService.class, tokenManager.get());
+        //retrofitService = createService(RetrofitService.class, "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzb2xjaGFuQGdtYWlsLmNvbSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNjI1OTQ1MDg2LCJleHAiOjE2MjU5NDg2ODZ9.uzw29Eiauodw6PQgQAYruWMR37q8rGaaJpY2o6Mf5Sygx9lnU7UJrThjhia_efVedHG2ppzcLmI8zl3eqnvMEQ");
 
-        retrofitService.test(jsonObjectLogin).enqueue(new Callback<JsonObject>() {
+        retrofitService.getToken("eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzb2xjaGFuQGdtYWlsLmNvbSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNjI1OTQ1MDg2LCJleHAiOjE2MjU5NDg2ODZ9.uzw29Eiauodw6PQgQAYruWMR37q8rGaaJpY2o6Mf5Sygx9lnU7UJrThjhia_efVedHG2ppzcLmI8zl3eqnvMEQ").enqueue(new Callback<Map<String, String>>() {
             @Override
-            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                //Headers headers = response.headers();
-                System.out.println(response.body());
+            public void onResponse(Call<Map<String, String>> call, Response<Map<String, String>> response) {
 
             }
 
             @Override
-            public void onFailure(Call<JsonObject> call, Throwable t) {
-                Log.d("서버", "실패");
+            public void onFailure(Call<Map<String, String>> call, Throwable t) {
+
             }
         });
-
     }
 
 }

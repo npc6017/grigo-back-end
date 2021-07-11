@@ -2,8 +2,12 @@ package com.devidea.grigoapplication;
 
 import com.google.gson.JsonObject;
 
+import java.util.Map;
+
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.Header;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
 
@@ -20,4 +24,8 @@ public interface RetrofitService {
 
     @POST("test")
     Call<JsonObject> test(@Body JsonObject param);
+
+    @POST("test")
+    Call<Map<String, String>> getToken(@Header("X-AUTH-TOKEN") String token);
+
 }
