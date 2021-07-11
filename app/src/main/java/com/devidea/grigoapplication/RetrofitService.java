@@ -26,6 +26,6 @@ public interface RetrofitService {
     Call<JsonObject> test(@Body JsonObject param);
 
     @POST("test")
-    Call<Map<String, String>> getToken(@Header("X-AUTH-TOKEN") String token);
+    Call<Map<String, String>> getToken();
 
 }

@@ -22,31 +22,43 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MainActivity extends AppCompatActivity {
     Button signUp;
     Button login;
+    Button test;
     ServiceGenerator serviceGenerator;
     TokenManager tokenManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         PrefsHelper.init(getApplicationContext());
+        serviceGenerator = new ServiceGenerator();
+        tokenManager = new TokenManager();
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        serviceGenerator = new ServiceGenerator();
-        serviceGenerator.login();
-        tokenManager = new TokenManager();
-        tokenManager.set("eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzb2xjaGFuQGdtYWlsLmNvbSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNjI1OTQ1MDg2LCJleHAiOjE2MjU5NDg2ODZ9.uzw29Eiauodw6PQgQAYruWMR37q8rGaaJpY2o6Mf5Sygx9lnU7UJrThjhia_efVedHG2ppzcLmI8zl3eqnvMEQ");
-        Log.d("token", tokenManager.get());
+        signUp = findViewById(R.id.signup);
+        login = findViewById(R.id.login);
+        test = findViewById(R.id.test);
 
-        serviceGenerator.test();
+        signUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                serviceGenerator.signup();
+            }
+        });
 
-        /*
-        signUp.findViewById(R.id.signup);
-        login.findViewById(R.id.login);
+        login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                serviceGenerator.login();
+            }
+        });
 
-         */
-
-
+        test.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                serviceGenerator.test();
+            }
+        });
 
 
     }

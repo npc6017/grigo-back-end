@@ -1,5 +1,7 @@
 package com.devidea.grigoapplication;
 
+import android.util.Log;
+
 import java.io.IOException;
 
 import okhttp3.Interceptor;
@@ -12,6 +14,7 @@ public class AuthenticationInterceptor implements Interceptor {
 
     public AuthenticationInterceptor(String token) {
         this.authToken = token;
+        Log.d("intercepter", authToken);
     }
 
     @Override
@@ -20,6 +23,8 @@ public class AuthenticationInterceptor implements Interceptor {
 
         Request.Builder builder = original.newBuilder()
                 .header("X-AUTH-TOKEN", authToken);
+        Log.d("intercepter-inner", authToken);
+        //.header("Authorization", authToken);
 
         Request request = builder.build();
         return chain.proceed(request);

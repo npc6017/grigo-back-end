@@ -23,7 +23,6 @@ public class ServiceGenerator {
 
     public JsonObject jsonObject;
     public JsonObject jsonObjectLogin;
-    public JsonObject testJson;
 
     public RetrofitService retrofitService = retrofit.create(RetrofitService.class);
     public static final String BASE_URL = "http://solac.iptime.org:1234/";
@@ -45,7 +44,7 @@ public class ServiceGenerator {
             Class<S> serviceClass, final String authToken) {
         if (!TextUtils.isEmpty(authToken)) {
             AuthenticationInterceptor interceptor =
-                    new AuthenticationInterceptor("Bearer " + authToken);
+                    new AuthenticationInterceptor(authToken);
 
             if (!httpClient.interceptors().contains(interceptor)) {
                 httpClient.addInterceptor(interceptor);
@@ -90,8 +89,16 @@ public class ServiceGenerator {
         retrofitService.login(jsonObjectLogin).enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                //Headers headers = response.headers();
-                //System.out.println(response.headers());
+
+                Headers headers = response.headers();
+                String token = headers.get("Authorization");
+                String[] body = token.split(" ");
+
+
+                System.out.println(response.headers());
+
+                tokenManager.set(body[1]);
+                Log.d("token", tokenManager.get());
 
             }
 
@@ -105,12 +112,13 @@ public class ServiceGenerator {
     }
 
     public void test() {
-        //retrofitService = createService(RetrofitService.class, "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzb2xjaGFuQGdtYWlsLmNvbSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNjI1OTQ1MDg2LCJleHAiOjE2MjU5NDg2ODZ9.uzw29Eiauodw6PQgQAYruWMR37q8rGaaJpY2o6Mf5Sygx9lnU7UJrThjhia_efVedHG2ppzcLmI8zl3eqnvMEQ");
 
-        retrofitService.getToken("eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzb2xjaGFuQGdtYWlsLmNvbSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNjI1OTQ1MDg2LCJleHAiOjE2MjU5NDg2ODZ9.uzw29Eiauodw6PQgQAYruWMR37q8rGaaJpY2o6Mf5Sygx9lnU7UJrThjhia_efVedHG2ppzcLmI8zl3eqnvMEQ").enqueue(new Callback<Map<String, String>>() {
+        RetrofitService r =  createService(RetrofitService.class, tokenManager.get());
+
+        r.getToken().enqueue(new Callback<Map<String, String>>() {
             @Override
             public void onResponse(Call<Map<String, String>> call, Response<Map<String, String>> response) {
-
+                System.out.println(response.body());
             }
 
             @Override
@@ -118,6 +126,7 @@ public class ServiceGenerator {
 
             }
         });
+
     }
 
 }
