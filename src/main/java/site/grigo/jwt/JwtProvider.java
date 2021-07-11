@@ -5,6 +5,7 @@ import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,6 +20,7 @@ import java.util.Date;
 
 @RequiredArgsConstructor
 @Component
+@Slf4j
 public class JwtProvider {
 
     private String secretKey = "secretKey설정";
@@ -54,8 +56,18 @@ public class JwtProvider {
                 .compact();
     }
 
+    //token으로 들어온 게, Bearer라면 bearer라는 것은 jwt(bearer auth) 방식으로 token이 발급되었다는 것을 알려주는 것.
     public String resolveToken(HttpServletRequest request){
-        return request.getHeader("X-AUTH-TOKEN");
+        String requestTokenHeader = request.getHeader("Authorization");
+        if(requestTokenHeader == null) return null;
+        if(requestTokenHeader.startsWith("bearer ") || requestTokenHeader.startsWith("Bearer ")){
+            return requestTokenHeader.substring(7);
+        }
+
+        else{
+            //예외 발생. 지정되지 않은 token으로 authorization 시도.
+            return null;
+        }
     }
 
     /**
