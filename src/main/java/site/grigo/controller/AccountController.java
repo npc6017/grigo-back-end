@@ -31,10 +31,12 @@ public class AccountController {
     public LoginDTO login(@RequestBody Account account, HttpServletResponse response) {
         log.info("email : {}, password : {}", account.getEmail(), account.getPassword());
         //토큰을 만들기 전에, 아이디가 존재하는지, 그리고 비밀번호도 맞는지부터 판별할 것.
-        accountService.checkAccount(account.getEmail(), account.getPassword());
-        String token = jwtProvider.createToken(account);
-        response.setHeader("Authorization", "bearer " + token);
-        return new LoginDTO(200);
+        if(accountService.checkAccount(account.getEmail(), account.getPassword())){
+            String token = jwtProvider.createToken(account);
+            response.setHeader("Authorization", "bearer " + token);
+            return new LoginDTO(200);
+        }
+        return null;
     }
 
     @ResponseBody

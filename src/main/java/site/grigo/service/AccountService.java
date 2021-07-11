@@ -7,7 +7,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import site.grigo.domain.Account;
 import site.grigo.domain.AccountRepository;
-import site.grigo.error.TestException;
+import site.grigo.error.BusinessException;
 
 import java.util.Optional;
 
@@ -33,6 +33,17 @@ public class AccountService implements UserDetailsService {
 
     //아이디가 존재하는지 찾고, 비밀번호 맞는지 확인하기.
     public boolean checkAccount(String email, String password){
-        throw new TestException("test");
+        if(checkEmail(email) && checkPassword(email, password)) return true;
+        else return false;
+    }
+
+    private boolean checkEmail(String email){
+        if(accountRepository.findByEmail(email).isPresent()) return true;
+        throw new BusinessException("아이디가 존재하지 않습니다.");
+    }
+    private boolean checkPassword(String email, String password){
+        UserDetails account = accountRepository.findByEmail(email).get();
+        if(account.getPassword().equals(password)) return true;
+        throw new BusinessException("비밀번호가 틀립니다.");
     }
 }
