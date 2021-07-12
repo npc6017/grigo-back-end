@@ -17,6 +17,9 @@ public class Account implements UserDetails {
     private String password;
     private String sex;
 
+    public Account() {
+    }
+
     public Account(String email, String password, String name, String birth, Integer student_id, String sex, String phone) {
         this.email = email;
         this.password = password;

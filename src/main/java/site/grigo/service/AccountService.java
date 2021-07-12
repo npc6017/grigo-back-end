@@ -1,6 +1,7 @@
 package site.grigo.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -15,6 +16,7 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
+@Slf4j
 public class AccountService implements UserDetailsService {
     private final AccountRepository accountRepository;
     private final PasswordEncoder passwordEncoder; // Password 인코딩
@@ -23,8 +25,8 @@ public class AccountService implements UserDetailsService {
         // 계정 생성
         Account account = new Account(
                 signUpJson.getEmail(),
-                signUpJson.getName(),
                 passwordEncoder.encode(signUpJson.getPassword()),
+                signUpJson.getName(),
                 signUpJson.getBirth(),
                 signUpJson.getStudent_id(),
                 signUpJson.getSex(),
@@ -63,7 +65,10 @@ public class AccountService implements UserDetailsService {
 
     private boolean checkPassword(String email, String password) {
         UserDetails account = accountRepository.findByEmail(email).get();
-        if (account.getPassword().equals(password)) return true;
+
+        if (passwordEncoder.matches((CharSequence) password, account.getPassword())) return true;
+        log.info("pass : {}, saved pass : {}", password, accountRepository.findByEmail(email).get().getPassword());
+        //if(password.equals(accountRepository.findByEmail(email).get().getPassword())) return true;
         throw new BusinessException("비밀번호가 틀립니다.");
     }
 
