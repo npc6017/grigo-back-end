@@ -17,12 +17,14 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ServiceGenerator {
-
+/*
     //수정해야합니다.
     TokenManager tokenManager = new TokenManager();
 
     public JsonObject jsonObject;
     public JsonObject jsonObjectLogin;
+
+ */
 
     public RetrofitService retrofitService = retrofit.create(RetrofitService.class);
     public static final String BASE_URL = "http://solac.iptime.org:1234/";
@@ -56,7 +58,7 @@ public class ServiceGenerator {
 
         return retrofit.create(serviceClass);
     }
-
+/*
     public void signup() {
         jsonObject.addProperty("email", "test@naver.com");
         jsonObject.addProperty("password", "12345678a");
@@ -66,7 +68,7 @@ public class ServiceGenerator {
         jsonObject.addProperty("sex", "man");
         jsonObject.addProperty("phone", "01012345678");
 
-        retrofitService.setPostBody(jsonObject).enqueue(new Callback<JsonObject>() {
+        retrofitService.signup(jsonObject).enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 Log.d("서버", String.valueOf(response.body()));
@@ -128,5 +130,7 @@ public class ServiceGenerator {
         });
 
     }
+
+ */
 
 }

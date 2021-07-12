@@ -31,14 +31,17 @@ public class MainActivity extends AppCompatActivity {
         PrefsHelper.init(getApplicationContext());
         serviceGenerator = new ServiceGenerator();
         tokenManager = new TokenManager();
+        RetrofitService retrofitService;
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        retrofitService = serviceGenerator.createService(RetrofitService.class);
+
         signUp = findViewById(R.id.signup);
         login = findViewById(R.id.login);
         test = findViewById(R.id.test);
-
+/*
         signUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -61,5 +64,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+
+ */
     }
 }
