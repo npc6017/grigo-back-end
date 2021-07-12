@@ -1,4 +1,4 @@
-package site.grigo.domain;
+package site.grigo.domain.account;
 
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
@@ -16,6 +16,16 @@ public class Account implements UserDetails {
     private String email;
     private String password;
     private String sex;
+
+    public Account(String email, String password, String name, String birth, Integer student_id, String sex, String phone) {
+        this.email = email;
+        this.password = password;
+        this.name = name;
+        this.birth = birth;
+        this.student_id = student_id;
+        this.sex = sex;
+        this.phone = phone;
+    }
 
     public void setId(Long id){
         this.id = id;

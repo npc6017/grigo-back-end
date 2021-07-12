@@ -10,7 +10,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
-import site.grigo.domain.Account;
+import site.grigo.domain.account.Account;
 import site.grigo.service.AccountService;
 
 import javax.annotation.PostConstruct;
