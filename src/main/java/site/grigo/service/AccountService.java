@@ -9,9 +9,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import site.grigo.domain.account.Account;
 import site.grigo.domain.account.AccountRepository;
+import site.grigo.domain.account.Profile;
 import site.grigo.domain.account.SignUpJson;
 import site.grigo.error.BusinessException;
-
+import site.grigo.jwt.JwtProvider;
+import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -20,6 +22,7 @@ import java.util.Optional;
 public class AccountService implements UserDetailsService {
     private final AccountRepository accountRepository;
     private final PasswordEncoder passwordEncoder; // Password 인코딩
+    private final JwtProvider jwtProvider;
 
     public void join(SignUpJson signUpJson) {
         // 계정 생성
@@ -34,8 +37,6 @@ public class AccountService implements UserDetailsService {
         // 등록
         accountRepository.save(account);
     }
-
-    ;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -70,6 +71,23 @@ public class AccountService implements UserDetailsService {
         log.info("pass : {}, saved pass : {}", password, accountRepository.findByEmail(email).get().getPassword());
         //if(password.equals(accountRepository.findByEmail(email).get().getPassword())) return true;
         throw new BusinessException("비밀번호가 틀립니다.");
+    }
+
+    /** User Info Update : Phone, Birth */
+    public Account updateProfile(HttpServletRequest request, Profile profile) {
+        String token = jwtProvider.resolveToken((HttpServletRequest) request);
+        String userEmail = jwtProvider.getUserEmail(token);
+
+        Account account = accountRepository.findByEmail(userEmail).get();
+        account.setPhone(profile.getPhone());
+        account.setBirth(profile.getBirth());
+
+        return accountRepository.save(account);
+    }
+
+    /** TODO PassWord Update */
+    public void updatePassWord() {
+
     }
 
 }

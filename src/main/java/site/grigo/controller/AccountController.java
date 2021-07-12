@@ -7,14 +7,17 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import site.grigo.domain.account.Account;
+import site.grigo.domain.account.Profile;
 import site.grigo.domain.account.ResponseDTO;
 import site.grigo.domain.account.SignUpJson;
 import site.grigo.jwt.JwtProvider;
 import site.grigo.service.AccountService;
 import site.grigo.validator.SignUpValidator;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.util.ArrayList;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -87,5 +90,11 @@ public class AccountController {
     public ResponseDTO test() {
         log.info("heelo?");
         return new ResponseDTO(200, "hello?");
+    }
+
+    @PostMapping("/settings/profile")
+    public Profile updateProfile(@RequestBody Profile profile, HttpServletRequest request) {
+        Account account = accountService.updateProfile(request, profile);
+        return new Profile(account.getPhone(), account.getBirth());
     }
 }
