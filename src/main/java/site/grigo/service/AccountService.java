@@ -2,15 +2,13 @@ package site.grigo.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import site.grigo.domain.account.Account;
-import site.grigo.domain.account.AccountRepository;
-import site.grigo.domain.account.Profile;
-import site.grigo.domain.account.SignUpJson;
+import site.grigo.domain.account.*;
 import site.grigo.error.BusinessException;
 import site.grigo.jwt.JwtProvider;
 import javax.servlet.http.HttpServletRequest;
@@ -73,21 +71,52 @@ public class AccountService implements UserDetailsService {
         throw new BusinessException("비밀번호가 틀립니다.");
     }
 
-    /** User Info Update : Phone, Birth */
-    public Account updateProfile(HttpServletRequest request, Profile profile) {
-        String token = jwtProvider.resolveToken((HttpServletRequest) request);
-        String userEmail = jwtProvider.getUserEmail(token);
+    /** Get Profile Info */
+    public ProfileDTO getProfile(HttpServletRequest request) {
+        Account account = getAccountToToken(request);
+        ProfileDTO profile = makeProfileDTO(account);
+        return profile;
+    }
 
-        Account account = accountRepository.findByEmail(userEmail).get();
+
+    /** User Info Update : Phone, Birth */
+    public ProfileDTO updateProfile(HttpServletRequest request, ProfileDTO profile) {
+        Account account = getAccountToToken(request);
+
+        // 수정 및 반영
         account.setPhone(profile.getPhone());
         account.setBirth(profile.getBirth());
+        accountRepository.save(account);
 
-        return accountRepository.save(account);
+        // ProfileDTO 생성 및 반환
+        return makeProfileDTO(account);
     }
 
     /** TODO PassWord Update */
     public void updatePassWord() {
 
     }
+
+    /* Token으로 Account 조회 */
+    private Account getAccountToToken(HttpServletRequest request) {
+        String token = jwtProvider.resolveToken(request);
+        String userEmail = jwtProvider.getUserEmail(token);
+
+        return accountRepository.findByEmail(userEmail).get();
+    }
+    /* account로 ProfileDTO 생성(필요 없는 데이터 제거) */
+    private ProfileDTO makeProfileDTO(Account account) {
+        ProfileDTO profile = new ProfileDTO();
+        profile.setBirth(account.getBirth());
+        profile.setEmail(account.getEmail());
+        profile.setPhone(account.getPhone());
+        profile.setSex(account.getSex());
+        profile.setName(account.getName());
+        profile.setStudent_id(account.getStudent_id());
+        return profile;
+    }
+
+
+
 
 }

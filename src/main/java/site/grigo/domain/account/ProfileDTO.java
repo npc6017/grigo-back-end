@@ -1,5 +1,6 @@
 package site.grigo.domain.account;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,12 +9,14 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class Profile {
+public class ProfileDTO {
+    private String email;
+    private String name;
+    private Integer student_id;
     private String phone;
     private String birth;
+    private String sex;
 
-    public Profile(String phone, String birth) {
-        this.phone = phone;
-        this.birth = birth;
+    public ProfileDTO() {
     }
 }
