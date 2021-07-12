@@ -26,7 +26,7 @@ public class JoinActivity extends AppCompatActivity {
 
     //서버 통신을 위함
     private Retrofit joinRetrofit;
-    private AccountInterface joinRetrofitAPI;
+    private AccountInterface joinService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +81,7 @@ public class JoinActivity extends AppCompatActivity {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        joinRetrofitAPI = joinRetrofit.create(AccountInterface.class);
+        joinService = joinRetrofit.create(AccountInterface.class);
 
         //Json 객체 생성
         JsonObject jsonObject = new JsonObject();
@@ -96,7 +96,7 @@ public class JoinActivity extends AppCompatActivity {
         jsonObject.addProperty("phone", phone);
 
         //api 호출
-        joinRetrofitAPI.getAccountJoin(jsonObject).enqueue(new Callback<JsonObject>() {
+        joinService.getAccountJoin(jsonObject).enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 if(response.isSuccessful()){
