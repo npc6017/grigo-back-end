@@ -6,11 +6,11 @@ public class TokenManager {
 
     PrefsHelper prefsHelper = PrefsHelper.getInstance();
 
-    public String get(){
-        return prefsHelper.read("token",null);
+    public String get() {
+        return prefsHelper.read("token", null);
     }
 
-    public void set(String token){
+    public void set(String token) {
         prefsHelper.write("token", token);
 
     }

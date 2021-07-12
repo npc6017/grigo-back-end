@@ -113,7 +113,7 @@ public class ServiceGenerator {
 
     public void test() {
 
-        RetrofitService r =  createService(RetrofitService.class, tokenManager.get());
+        RetrofitService r = createService(RetrofitService.class, tokenManager.get());
 
         r.getToken().enqueue(new Callback<Map<String, String>>() {
             @Override
