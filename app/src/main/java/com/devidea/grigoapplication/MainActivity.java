@@ -20,27 +20,31 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
+    /*
     Button signUp;
     Button login;
     Button test;
+
+     */
     ServiceGenerator serviceGenerator;
-    TokenManager tokenManager;
+    //TokenManager tokenManager;
+    RetrofitService retrofitService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         PrefsHelper.init(getApplicationContext());
         serviceGenerator = new ServiceGenerator();
-        tokenManager = new TokenManager();
-        RetrofitService retrofitService;
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         retrofitService = serviceGenerator.createService(RetrofitService.class);
-
+/*
         signUp = findViewById(R.id.signup);
         login = findViewById(R.id.login);
         test = findViewById(R.id.test);
+
+ */
 /*
         signUp.setOnClickListener(new View.OnClickListener() {
             @Override
