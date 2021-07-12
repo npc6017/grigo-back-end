@@ -60,13 +60,13 @@ public class ServiceGenerator {
     }
 /*
     public void signup() {
-        jsonObject.addProperty("email", "test@naver.com");
-        jsonObject.addProperty("password", "12345678a");
-        jsonObject.addProperty("name", "jun");
-        jsonObject.addProperty("birth", "980123");
-        jsonObject.addProperty("student_id", "60172213");
-        jsonObject.addProperty("sex", "man");
-        jsonObject.addProperty("phone", "01012345678");
+        jsonObject.addProperty("email", "email");
+        jsonObject.addProperty("password", "password");
+        jsonObject.addProperty("name", "name");
+        jsonObject.addProperty("birth", "birth");
+        jsonObject.addProperty("student_id", "student_id");
+        jsonObject.addProperty("sex", "sex");
+        jsonObject.addProperty("phone", "phone");
 
         retrofitService.signup(jsonObject).enqueue(new Callback<JsonObject>() {
             @Override
