@@ -1,4 +1,4 @@
-package site.grigo.domain.account;
+package site.grigo.domain;
 
 import lombok.Getter;
 import lombok.Setter;
