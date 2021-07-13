@@ -57,8 +57,7 @@ public class JwtProvider {
     }
 
     //token으로 들어온 게, Bearer라면 bearer라는 것은 jwt(bearer auth) 방식으로 token이 발급되었다는 것을 알려주는 것.
-    public String resolveToken(HttpServletRequest request){
-        String requestTokenHeader = request.getHeader("Authorization");
+    public String resolveToken(String requestTokenHeader){
         if(requestTokenHeader == null) return null;
         if(requestTokenHeader.startsWith("bearer ") || requestTokenHeader.startsWith("Bearer ")){
             return requestTokenHeader.substring(7);
