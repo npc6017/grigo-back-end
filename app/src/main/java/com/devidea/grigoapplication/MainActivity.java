@@ -1,5 +1,6 @@
 package com.devidea.grigoapplication;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
@@ -7,8 +8,14 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
+
+import androidx.appcompat.widget.Toolbar;
 
 import com.google.gson.JsonObject;
 
@@ -26,9 +33,34 @@ public class MainActivity extends AppCompatActivity {
     Button test;
 
      */
+    Toolbar toolbar;
     ServiceGenerator serviceGenerator;
     //TokenManager tokenManager;
     RetrofitService retrofitService;
+
+    //Toolbar
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            //테스트
+            case R.id.menu_search:
+                Toast.makeText(this,"검색",Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.menu_account:
+                Toast.makeText(this,"설정",Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.menu_logout:
+                Toast.makeText(this,"로그아웃",Toast.LENGTH_SHORT).show();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +69,9 @@ public class MainActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         retrofitService = serviceGenerator.createService(RetrofitService.class);
 /*
@@ -68,7 +103,9 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+*/
 
- */
     }
+
+
 }
