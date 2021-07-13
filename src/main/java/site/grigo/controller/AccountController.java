@@ -7,7 +7,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import site.grigo.domain.account.Account;
-import site.grigo.domain.account.ResponseDTO;
+import site.grigo.domain.ResponseDTO;
 import site.grigo.domain.account.SignUpJson;
 import site.grigo.jwt.JwtProvider;
 import site.grigo.service.AccountService;
