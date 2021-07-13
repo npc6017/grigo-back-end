@@ -101,9 +101,18 @@ public class AccountController {
         ProfileDTO updatedAccount = accountService.updateProfile(request, profile);
         return updatedAccount;
     }
-
+    /* TODO PassWord UPDATE */
+    /** 비밀번호 변경(Password Update) */
+    @PostMapping("/settings/password")
+    public ResponseDTO updatePassword(@RequestBody PasswordUpdateDTO updatePassword, HttpServletRequest request ,HttpServletResponse response) {
+        ResponseDTO responseDTO = accountService.updatePassWord(updatePassword, request);
+        if(responseDTO.getStatus() != 200)
+            response.setStatus(400);
+        response.setStatus(200);
+        return responseDTO;
+    }
 
     /* TODO TAG UPDATE */
 
-    /* TODO PassWord UPDATE */
+
 }

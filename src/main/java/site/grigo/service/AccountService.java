@@ -12,6 +12,7 @@ import site.grigo.domain.account.*;
 import site.grigo.error.BusinessException;
 import site.grigo.jwt.JwtProvider;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -92,9 +93,26 @@ public class AccountService implements UserDetailsService {
         return makeProfileDTO(account);
     }
 
-    /** TODO PassWord Update */
-    public void updatePassWord() {
+    /** TODO PassWord Update
+     * @param updatePassword
+     * @param request*/
+    public ResponseDTO updatePassWord(PasswordUpdateDTO updatePassword, HttpServletRequest request) {
+        Account account = getAccountToToken(request);
 
+        boolean currentPasswordMatches = passwordEncoder.matches(updatePassword.getCurrentPassword(), account.getPassword());
+        boolean passwordConfirm = updatePassword.getNewPassword().equals(updatePassword.getNewPasswordConfirm());
+
+        if(!currentPasswordMatches)  {
+            return new ResponseDTO(400, "비밀번호가 일치하지 않습니다.");
+        }
+        if(!passwordConfirm) {
+            return new ResponseDTO(400, "새로운 비밀번호가 서로 일치하지 않습니다.");
+        }
+
+        account.setPassword(passwordEncoder.encode(updatePassword.getNewPassword()));
+        accountRepository.save(account);
+
+        return new ResponseDTO(200, "비밀번호가 성공적으로 변경되었습니다.");
     }
 
     /* Token으로 Account 조회 */
