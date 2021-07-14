@@ -7,11 +7,11 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import site.grigo.domain.account.Account;
-import site.grigo.domain.account.AccountRepository;
-import site.grigo.domain.account.SignUpJson;
+import site.grigo.domain.ResponseDTO;
+import site.grigo.domain.account.*;
 import site.grigo.error.BusinessException;
-
+import site.grigo.jwt.JwtProvider;
+import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -20,6 +20,7 @@ import java.util.Optional;
 public class AccountService implements UserDetailsService {
     private final AccountRepository accountRepository;
     private final PasswordEncoder passwordEncoder; // Password 인코딩
+    private final JwtProvider jwtProvider;
 
     public void join(SignUpJson signUpJson) {
         // 계정 생성
@@ -34,8 +35,6 @@ public class AccountService implements UserDetailsService {
         // 등록
         accountRepository.save(account);
     }
-
-    ;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -71,5 +70,73 @@ public class AccountService implements UserDetailsService {
         //if(password.equals(accountRepository.findByEmail(email).get().getPassword())) return true;
         throw new BusinessException("비밀번호가 틀립니다.");
     }
+
+    /** Get Profile Info */
+    public ProfileDTO getProfile(HttpServletRequest request) {
+        String header = request.getHeader("Authorization");
+        Account account = getAccountToToken(header);
+        ProfileDTO profile = makeProfileDTO(account);
+        return profile;
+    }
+
+
+    /** User Info Update : Phone, Birth */
+    public ProfileDTO updateProfile(HttpServletRequest request, ProfileDTO profile) {
+        String header = request.getHeader("Authorization");
+        Account account = getAccountToToken(header);
+
+        // 수정 및 반영
+        account.setPhone(profile.getPhone());
+        account.setBirth(profile.getBirth());
+        accountRepository.save(account);
+
+        // ProfileDTO 생성 및 반환
+        return makeProfileDTO(account);
+    }
+
+    /** TODO PassWord Update
+     * @param updatePassword
+     * @param request*/
+    public ResponseDTO updatePassWord(PasswordUpdateDTO updatePassword, HttpServletRequest request) {
+        String header = request.getHeader("Authorization");
+        Account account = getAccountToToken(header);
+
+        boolean currentPasswordMatches = passwordEncoder.matches(updatePassword.getCurrentPassword(), account.getPassword());
+        boolean passwordConfirm = updatePassword.getNewPassword().equals(updatePassword.getNewPasswordConfirm());
+
+        if(!currentPasswordMatches)  {
+            return new ResponseDTO(400, "비밀번호가 일치하지 않습니다.");
+        }
+        if(!passwordConfirm) {
+            return new ResponseDTO(400, "새로운 비밀번호가 서로 일치하지 않습니다.");
+        }
+
+        account.setPassword(passwordEncoder.encode(updatePassword.getNewPassword()));
+        accountRepository.save(account);
+
+        return new ResponseDTO(200, "비밀번호가 성공적으로 변경되었습니다.");
+    }
+
+    /* Token으로 Account 조회 */
+    private Account getAccountToToken(String header) {
+        String token = jwtProvider.resolveToken(header);
+        String userEmail = jwtProvider.getUserEmail(token);
+
+        return accountRepository.findByEmail(userEmail).get();
+    }
+    /* account로 ProfileDTO 생성(필요 없는 데이터 제거) */
+    private ProfileDTO makeProfileDTO(Account account) {
+        ProfileDTO profile = new ProfileDTO();
+        profile.setBirth(account.getBirth());
+        profile.setEmail(account.getEmail());
+        profile.setPhone(account.getPhone());
+        profile.setSex(account.getSex());
+        profile.setName(account.getName());
+        profile.setStudent_id(account.getStudent_id());
+        return profile;
+    }
+
+
+
 
 }

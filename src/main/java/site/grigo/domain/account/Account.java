@@ -1,19 +1,20 @@
 package site.grigo.domain.account;
 
 import lombok.Getter;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 
-@Getter
+@Getter @Setter
 public class Account implements UserDetails {
     private Long id;
-    private String name;
-    private String phone;
-    private Integer student_id;
-    private String birth;
     private String email;
+    private String name;
+    private Integer student_id;
+    private String phone;
+    private String birth;
     private String password;
     private String sex;
 
