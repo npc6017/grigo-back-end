@@ -9,7 +9,7 @@
         app:showAsAction="always" />
     <group>
         <item
-            android:id="@+id/menu_account"
+            android:id="@+id/menu_mypage"
             android:title="설정"
             app:showAsAction="never"/>
         <item

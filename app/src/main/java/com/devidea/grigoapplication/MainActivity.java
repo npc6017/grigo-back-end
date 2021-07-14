@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -52,8 +53,10 @@ public class MainActivity extends AppCompatActivity {
             case R.id.menu_search:
                 Toast.makeText(this,"검색",Toast.LENGTH_SHORT).show();
                 return true;
-            case R.id.menu_account:
-                Toast.makeText(this,"설정",Toast.LENGTH_SHORT).show();
+            case R.id.menu_mypage:
+                //Toast.makeText(this,"설정",Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(MainActivity.this, MyPageActivity.class);
+                startActivity(intent);
                 return true;
             case R.id.menu_logout:
                 Toast.makeText(this,"로그아웃",Toast.LENGTH_SHORT).show();
@@ -72,6 +75,9 @@ public class MainActivity extends AppCompatActivity {
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        //app 제목 -> 추후에 app 이름 정해지면 수정
+        getSupportActionBar().setTitle("Title");
 
         retrofitService = serviceGenerator.createService(RetrofitService.class);
 /*
