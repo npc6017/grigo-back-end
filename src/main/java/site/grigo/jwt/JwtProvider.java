@@ -11,6 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import site.grigo.domain.account.Account;
+import site.grigo.domain.account.AccountRepository;
 import site.grigo.service.AccountService;
 
 import javax.annotation.PostConstruct;
@@ -26,7 +27,7 @@ public class JwtProvider {
     private String secretKey = "secretKey설정";
     private long tokenValidTime = 60 * 60 * 1000L; //1시간 설정
 
-    private final AccountService accountService;
+    private final AccountRepository accountRepository;
 
     @PostConstruct
     protected void init(){
@@ -81,11 +82,11 @@ public class JwtProvider {
     }
 
     public Authentication getAuthentication(String token){
-        UserDetails userDetails = accountService.loadUserByEmail(getUserEmail(token));
+        UserDetails userDetails = accountRepository.findByEmail(getUserEmail(token)).get();
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
-
-    private String getUserEmail(String token){
+    /* private -> public : AccountService에서 필요. */
+    public String getUserEmail(String token){
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
     }
 }

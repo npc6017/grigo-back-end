@@ -39,3 +39,31 @@
 > 
 > > - domain/ account 패키지  
        JoinDTO 작성 : 응답의 상태와 에러 메세지를 담는 DTO. 응답 상태를 넣은 이유는 클라이언트에서 응답 상태 확인이 불가능하다 하여 추가.
+>
+> ## 7월 12일 (월)
+> > ### 구현
+> > - 프로필 정보 응답
+> > - 유저 정보 수정(Birth, Phone)
+>
+> > - controller 패키지  
+      AccountController 수정 :  프로필 정보 응답 맵핑 메서드 및 프로필 수정 맵핑 메서드 작성.      
+       request를 서비스의 메서드로 넘겨 반환받은 ProfileDTO를 클라이언트에 응답해준다.
+>
+> > - domain/ account 패키지  
+      ProfileDTO 작성 : Account에서 Passwor와 id를 제외한 보여지는 프로필 정보를 담당하는 DTO 작성
+>
+> > - service 패키지  
+      AccountService 추가 작성 : 매 요청마다 헤더의 Token으로 유저를 찾아야하기 때문에 Token으로 유저 반환받는 getAccountToToken메서드 작성, account를 통해 profileDTO 생성 메서드 작성.
+      유저 정보 반환 메서드, (Birth, Phone)업데이트 메서드 작성.
+> ## 7월 13일 (화)
+> > ### 구현
+> > - 패스워드 변경
+>
+> > - controller 패키지  
+      AccountController 수정 : current, new, confirm 총 3개의 비밀번호를 받아와 AccountService의 updatePassword메서드를 통한 결과 응답.
+>
+> > - domain/ account 패키지  
+      PasswordUpdateDTO 작성 : current, new, confirm 총 3개의 비밀번호를 갖는 DTO 작성.
+>
+> > - service 패키지  
+      AccountService 수정 : 요청받은 3가지의 비밀번호를 통해 currentPassword 확인, 새로운 비밀번호의 중복 여부를 확인하여 비밀번호 변경 또는 불가능 사유 ResponseDTO 생성하여 반환.     

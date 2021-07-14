@@ -6,13 +6,12 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
-import site.grigo.domain.account.Account;
-import site.grigo.domain.account.ResponseDTO;
-import site.grigo.domain.account.SignUpJson;
+import site.grigo.domain.account.*;
 import site.grigo.jwt.JwtProvider;
 import site.grigo.service.AccountService;
 import site.grigo.validator.SignUpValidator;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
@@ -88,4 +87,32 @@ public class AccountController {
         log.info("heelo?");
         return new ResponseDTO(200, "hello?");
     }
+
+    /** 프로필 정보 요청 */
+    @GetMapping("/profile")
+    public ProfileDTO getAccount(HttpServletRequest request) {
+        ProfileDTO profile = accountService.getProfile(request);
+        return profile;
+    }
+
+    /** 프로필 수정(Birth, Phone)*/
+    @PostMapping("/settings/profile")
+    public ProfileDTO updateProfile(@RequestBody ProfileDTO profile, HttpServletRequest request) {
+        ProfileDTO updatedAccount = accountService.updateProfile(request, profile);
+        return updatedAccount;
+    }
+    /* TODO PassWord UPDATE */
+    /** 비밀번호 변경(Password Update) */
+    @PostMapping("/settings/password")
+    public ResponseDTO updatePassword(@RequestBody PasswordUpdateDTO updatePassword, HttpServletRequest request ,HttpServletResponse response) {
+        ResponseDTO responseDTO = accountService.updatePassWord(updatePassword, request);
+        if(responseDTO.getStatus() != 200)
+            response.setStatus(400);
+        response.setStatus(200);
+        return responseDTO;
+    }
+
+    /* TODO TAG UPDATE */
+
+
 }
