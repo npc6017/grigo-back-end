@@ -47,7 +47,7 @@ public class JoinActivity extends AppCompatActivity {
 
         serviceGenerator = new ServiceGenerator();
         joinRetrofit = serviceGenerator.retrofitService;
-        //joinService = serviceGenerator.createService(RetrofitService.class);
+        // -> 변경되었습니다. joinService = serviceGenerator.createService(RetrofitService.class);
 
         //중복확인 버튼
         btn_check_Id = findViewById(R.id.btn_checkID);
