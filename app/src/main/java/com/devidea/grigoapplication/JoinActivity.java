@@ -27,8 +27,8 @@ public class JoinActivity extends AppCompatActivity {
     ServiceGenerator serviceGenerator;
 
     //서버 통신을 위함
-    private Retrofit joinRetrofit;
-    private RetrofitService joinService;
+    private RetrofitService joinRetrofit;
+    //private RetrofitService joinService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +46,8 @@ public class JoinActivity extends AppCompatActivity {
         sp_sex = findViewById(R.id.sp_sex);
 
         serviceGenerator = new ServiceGenerator();
-        joinService = serviceGenerator.createService(RetrofitService.class);
+        joinRetrofit = serviceGenerator.retrofitService;
+        //joinService = serviceGenerator.createService(RetrofitService.class);
 
         //중복확인 버튼
         btn_check_Id = findViewById(R.id.btn_checkID);
@@ -94,7 +95,7 @@ public class JoinActivity extends AppCompatActivity {
         jsonObject.addProperty("phone", phone);
 
         //api 호출
-        joinService.signup(jsonObject).enqueue(new Callback<JsonObject>() {
+        joinRetrofit.signup(jsonObject).enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 if(response.isSuccessful()){
