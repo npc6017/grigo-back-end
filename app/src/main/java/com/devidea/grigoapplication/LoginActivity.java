@@ -80,6 +80,9 @@ public class LoginActivity extends AppCompatActivity {
                 retrofitService = serviceGenerator.createService(RetrofitService.class, tokenManager.get());
 
                 userDataDTO = new Gson().fromJson(response.body(), UserDataDTO.class);
+                Log.d("info", userDataDTO.getStudent_id());
+                //DTO 작동하면 아래 코드로 저장
+                //PrefsHelper.write("getStudent_id",  userDataDTO.getStudent_id());
 
                 switch (response.code()) {
                     case 213: //태그 있을경우
