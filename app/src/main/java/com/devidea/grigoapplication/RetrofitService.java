@@ -15,7 +15,7 @@ import retrofit2.http.POST;
 public interface RetrofitService {
 
     @Headers("Content-Type: application/json")
-    @POST("account/join")
+    @POST("join")
     Call<JsonObject> signup(@Body JsonObject param);
 
     @Headers("Content-Type: application/json")
