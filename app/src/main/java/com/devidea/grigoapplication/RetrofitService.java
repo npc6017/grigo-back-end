@@ -22,6 +22,10 @@ public interface RetrofitService {
     @POST("login")
     Call<JsonObject> login(@Body JsonObject param);
 
+    @Headers("Content-Type: application/json")
+    @POST("tagSetting")
+    Call<JsonObject> tagPost(@Body JsonObject param);
+
     @POST("test")
     Call<JsonObject> test(@Body JsonObject param);
 

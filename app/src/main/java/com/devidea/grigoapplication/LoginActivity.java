@@ -26,7 +26,7 @@ public class LoginActivity extends AppCompatActivity {
 
     ServiceGenerator serviceGenerator;
     TokenManager tokenManager;
-    RetrofitService retrofitService;
+    static RetrofitService retrofitService;
     UserDataDTO userDataDTO;
 
     @Override
@@ -76,11 +76,15 @@ public class LoginActivity extends AppCompatActivity {
                 tokenManager.set(token);
                 Log.d("token", tokenManager.get());
 
+                //이게 되나?
+                retrofitService = serviceGenerator.createService(RetrofitService.class, tokenManager.get());
+
                 userDataDTO = new Gson().fromJson(response.body(), UserDataDTO.class);
 
                 switch (response.code()) {
                     case 213: //태그 있을경우
                         startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                        Toast.makeText(getApplicationContext(),"로그인 성공", Toast.LENGTH_LONG).show();
                         break;
 
 
@@ -89,7 +93,7 @@ public class LoginActivity extends AppCompatActivity {
                         break;
 
                     default:
-                        Toast.makeText(getApplicationContext(),"알수없는 오류", Toast.LENGTH_LONG);
+                        Toast.makeText(getApplicationContext(),"알수없는 오류", Toast.LENGTH_LONG).show();
                 }
 
 
@@ -97,6 +101,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
+                Toast.makeText(getApplicationContext(),"통신 오류", Toast.LENGTH_LONG).show();
 
             }
         });
