@@ -3,12 +3,15 @@ package com.devidea.grigoapplication;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.icu.text.CaseMap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import okhttp3.Headers;
@@ -24,6 +27,7 @@ public class LoginActivity extends AppCompatActivity {
     ServiceGenerator serviceGenerator;
     TokenManager tokenManager;
     RetrofitService retrofitService;
+    UserDataDTO userDataDTO;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +46,7 @@ public class LoginActivity extends AppCompatActivity {
         //회원가입 버튼
         btn_join = findViewById(R.id.btn_join);
         btn_join.setOnClickListener(view -> {
-            Intent intent = new Intent(LoginActivity.this,JoinActivity.class);
+            Intent intent = new Intent(LoginActivity.this, JoinActivity.class);
             startActivity(intent);
         });
 
@@ -52,11 +56,12 @@ public class LoginActivity extends AppCompatActivity {
 
             login(et_id.getText().toString(), et_pw.getText().toString());
 
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-            startActivity(intent);
+            //Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            //startActivity(intent);
         });
     }
 
+    //서버로 로그인 정보 전송.
     public void login(String user_id, String pw) {
         JsonObject jsonObjectLogin = new JsonObject();
 
@@ -68,12 +73,25 @@ public class LoginActivity extends AppCompatActivity {
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 Headers headers = response.headers();
                 String token = headers.get("Authorization");
-
-                System.out.println(response.headers());
-
                 tokenManager.set(token);
-
                 Log.d("token", tokenManager.get());
+
+                userDataDTO = new Gson().fromJson(response.body(), UserDataDTO.class);
+
+                switch (response.code()) {
+                    case 213: //태그 있을경우
+                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                        break;
+
+
+                    case 214: // 태그 없는경우
+                        startActivity(new Intent(LoginActivity.this, TagInputActivity.class));
+                        break;
+
+                    default:
+                        Toast.makeText(getApplicationContext(),"알수없는 오류", Toast.LENGTH_LONG);
+                }
+
 
             }
 
