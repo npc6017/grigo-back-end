@@ -73,15 +73,26 @@ public class AccountController {
 
     @ResponseBody
     @PostMapping("/login")
-    public ResponseDTO login(@RequestBody Account account, HttpServletResponse response) {
+    public ProfileDTO login(@RequestBody Account account, HttpServletRequest request, HttpServletResponse response) {
+        String header = request.getHeader("Authorization");
         log.info("email : {}, password : {}", account.getEmail(), account.getPassword());
         //토큰을 만들기 전에, 아이디가 존재하는지, 그리고 비밀번호도 맞는지부터 판별할 것.
         if (accountService.checkAccount(account.getEmail(), account.getPassword())) {
+            //토큰 만들기.
             String token = jwtProvider.createToken(account);
             response.setHeader("Authorization", "bearer " + token);
-            return new ResponseDTO(200);
+
+            //profileDTO 만들어오기
+            ProfileDTO profile = accountService.getProfileFromEmail(account.getEmail());
+            profile.setTags(accountService.getAccountTagsFromEmail(account.getEmail()));
+
+            //만약 태그에 데이터가 존재한다면 상태코드 213
+            if(!profile.getTags().isEmpty()) response.setStatus(213);
+            // 존재하지 않으면 214
+            else response.setStatus(214);
+            return profile;
         }
-        return null;
+        return new ProfileDTO(); // 아이디나 비밀번호 틀리면
     }
 
     @ResponseBody
@@ -94,14 +105,16 @@ public class AccountController {
     /** 프로필 정보 요청 */
     @GetMapping("/profile")
     public ProfileDTO getAccount(HttpServletRequest request) {
-        ProfileDTO profile = accountService.getProfile(request);
+        String header = request.getHeader("Authorization");
+        ProfileDTO profile = accountService.getProfile(header);
         return profile;
     }
 
     /** 프로필 수정(Birth, Phone)*/
     @PostMapping("/settings/profile")
     public ProfileDTO updateProfile(@RequestBody ProfileDTO profile, HttpServletRequest request) {
-        ProfileDTO updatedAccount = accountService.updateProfile(request, profile);
+        String header = request.getHeader("Authorization");
+        ProfileDTO updatedAccount = accountService.updateProfile(header, profile);
         return updatedAccount;
     }
 
@@ -109,7 +122,8 @@ public class AccountController {
     /** 비밀번호 변경(Password Update) */
     @PostMapping("/settings/password")
     public ResponseDTO updatePassword(@RequestBody PasswordUpdateDTO updatePassword, HttpServletRequest request ,HttpServletResponse response) {
-        ResponseDTO responseDTO = accountService.updatePassWord(updatePassword, request);
+        String header = request.getHeader("Authorization");
+        ResponseDTO responseDTO = accountService.updatePassWord(updatePassword, header);
         if(responseDTO.getStatus() != 200)
             response.setStatus(400);
         response.setStatus(200);

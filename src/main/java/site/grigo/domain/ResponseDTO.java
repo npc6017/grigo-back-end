@@ -6,6 +6,11 @@ import lombok.Setter;
 @Getter @Setter
 public class ResponseDTO {
 
+    // 응답 상태
+    private int status;
+    // 에러 메세지
+    private String errorMessage;
+
     // 빈 생성자
     public ResponseDTO() {
     }
@@ -19,9 +24,4 @@ public class ResponseDTO {
     public ResponseDTO(int status) {
         this.status = status;
     }
-
-    // 응답 상태
-    private int status;
-    // 에러 메세지
-    private String errorMessage;
 }

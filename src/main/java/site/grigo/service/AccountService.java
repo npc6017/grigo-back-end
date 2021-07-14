@@ -9,9 +9,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import site.grigo.domain.ResponseDTO;
 import site.grigo.domain.account.*;
+import site.grigo.domain.accounttag.AccountTag;
+import site.grigo.domain.accounttag.AccountTagRepositoryImpl;
 import site.grigo.error.BusinessException;
 import site.grigo.jwt.JwtProvider;
-import javax.servlet.http.HttpServletRequest;
+
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -21,6 +24,7 @@ public class AccountService implements UserDetailsService {
     private final AccountRepository accountRepository;
     private final PasswordEncoder passwordEncoder; // Password 인코딩
     private final JwtProvider jwtProvider;
+    private final AccountTagRepositoryImpl accountTagRepositoryImpl;
 
     public void join(SignUpJson signUpJson) {
         // 계정 생성
@@ -72,17 +76,19 @@ public class AccountService implements UserDetailsService {
     }
 
     /** Get Profile Info */
-    public ProfileDTO getProfile(HttpServletRequest request) {
-        String header = request.getHeader("Authorization");
+    public ProfileDTO getProfile(String header) {
         Account account = getAccountToToken(header);
         ProfileDTO profile = makeProfileDTO(account);
         return profile;
     }
 
+    public ProfileDTO getProfileFromEmail(String email){
+        return makeProfileDTO(accountRepository.findByEmail(email).get());
+    }
+
 
     /** User Info Update : Phone, Birth */
-    public ProfileDTO updateProfile(HttpServletRequest request, ProfileDTO profile) {
-        String header = request.getHeader("Authorization");
+    public ProfileDTO updateProfile(String header, ProfileDTO profile) {
         Account account = getAccountToToken(header);
 
         // 수정 및 반영
@@ -96,9 +102,8 @@ public class AccountService implements UserDetailsService {
 
     /** TODO PassWord Update
      * @param updatePassword
-     * @param request*/
-    public ResponseDTO updatePassWord(PasswordUpdateDTO updatePassword, HttpServletRequest request) {
-        String header = request.getHeader("Authorization");
+     * @param header*/
+    public ResponseDTO updatePassWord(PasswordUpdateDTO updatePassword, String header) {
         Account account = getAccountToToken(header);
 
         boolean currentPasswordMatches = passwordEncoder.matches(updatePassword.getCurrentPassword(), account.getPassword());
@@ -125,7 +130,7 @@ public class AccountService implements UserDetailsService {
         return accountRepository.findByEmail(userEmail).get();
     }
     /* account로 ProfileDTO 생성(필요 없는 데이터 제거) */
-    private ProfileDTO makeProfileDTO(Account account) {
+    public ProfileDTO makeProfileDTO(Account account) {
         ProfileDTO profile = new ProfileDTO();
         profile.setBirth(account.getBirth());
         profile.setEmail(account.getEmail());
@@ -136,7 +141,9 @@ public class AccountService implements UserDetailsService {
         return profile;
     }
 
-
+    public List<AccountTag> getAccountTagsFromEmail(String email) {
+        return accountTagRepositoryImpl.findAllByEmail(email).get();
+    }
 
 
 }
