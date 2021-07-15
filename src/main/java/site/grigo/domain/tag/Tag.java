@@ -15,6 +15,10 @@ public class Tag {
         this.category = category;
     }
 
+    public Tag(String name) {
+        this.name = name;
+    }
+
     public Tag() {
     }
 }

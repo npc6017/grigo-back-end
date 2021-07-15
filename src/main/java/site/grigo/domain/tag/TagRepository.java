@@ -8,4 +8,5 @@ public interface TagRepository {
     Optional<Tag> findByName(String name);
     Optional<Tag> findById(Long id);
     Optional<List<Tag>> findAll();
+    boolean tagExist(String tagName);
 }

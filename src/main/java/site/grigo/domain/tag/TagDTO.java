@@ -9,4 +9,8 @@ import java.util.List;
 @Setter
 public class TagDTO {
     private String tagName;
+
+    public TagDTO(String name) {
+        this.tagName = name;
+    }
 }

@@ -38,4 +38,10 @@ public class TagRepositoryImpl implements TagRepository {
                 tag1 -> tag1.getId().equals(id)).findAny();
         return tag;
     }
+
+    @Override
+    public boolean tagExist(String tagName) {
+        if(store.containsValue(tagName)) return true;
+        return false;
+    }
 }

@@ -9,8 +9,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import site.grigo.domain.ResponseDTO;
 import site.grigo.domain.account.*;
-import site.grigo.domain.accounttag.AccountTag;
 import site.grigo.domain.accounttag.AccountTagRepositoryImpl;
+import site.grigo.domain.tag.TagDTO;
 import site.grigo.error.BusinessException;
 import site.grigo.jwt.JwtProvider;
 
@@ -141,7 +141,7 @@ public class AccountService implements UserDetailsService {
         return profile;
     }
 
-    public List<AccountTag> getAccountTagsFromEmail(String email) {
+    public List<TagDTO> getAccountTagsFromEmail(String email) {
         return accountTagRepositoryImpl.findAllByEmail(email).get();
     }
 
