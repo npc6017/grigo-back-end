@@ -14,6 +14,6 @@ public class TagController {
     public String welcome(){
         // account - tag repo에 account가 존재하는지 체크후 없다면 /tag/setting 으로 redirect
         // 존재한다면, 바로 redirect homepage
-        return "ok"; 
+        return "ok";
     }
 }
