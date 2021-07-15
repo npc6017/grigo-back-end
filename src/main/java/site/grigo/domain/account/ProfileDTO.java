@@ -1,6 +1,5 @@
 package site.grigo.domain.account;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import site.grigo.domain.accounttag.AccountTag;
