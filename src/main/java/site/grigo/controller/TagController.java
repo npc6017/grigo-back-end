@@ -1,19 +1,24 @@
 package site.grigo.controller;
 
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.*;
+import site.grigo.domain.tag.Tag;
+import site.grigo.service.TagService;
+
+import java.util.List;
 
 @RequestMapping("/tag")
+@RequiredArgsConstructor
 @RestController
+@Slf4j
 public class TagController {
+    private final TagService tagService; //싱글톤이기 때문에 final이 필요함.
 
-    @ResponseBody
-    @PostMapping
-    public String welcome(){
-        // account - tag repo에 account가 존재하는지 체크후 없다면 /tag/setting 으로 redirect
-        // 존재한다면, 바로 redirect homepage
-        return "ok";
+    @GetMapping("/setting")
+    public List<Tag> tagAll() {
+        tagService.test();
+        return tagService.getAllTags();
     }
+
 }

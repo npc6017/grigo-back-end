@@ -1,21 +1,28 @@
 package site.grigo.domain.tag;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Repository
-public class TagRepositoryImpl implements TagRepository{
-    private final Map<Long, Tag> store = new HashMap<>();
+@Slf4j
+public class TagRepositoryImpl implements TagRepository {
+    private final Map<Long, Tag> store = new ConcurrentHashMap<>();
     private static Long sequence = 0L;
 
     @Override
     public Tag save(Tag tag) {
-        tag.setId(sequence++);
+        log.info("{}", tag.getName());
+        tag.setId(++sequence);
         store.put(tag.getId(), tag);
         return tag;
+    }
+
+    @Override
+    public Optional<List<Tag>> findAll() {
+        return Optional.of(new ArrayList<>(store.values()));
     }
 
     @Override
