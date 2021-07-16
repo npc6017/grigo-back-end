@@ -7,6 +7,7 @@ import java.util.Map;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
@@ -22,10 +23,11 @@ public interface RetrofitService {
     @POST("login")
     Call<JsonObject> login(@Body JsonObject param);
 
-    @POST("test")
-    Call<JsonObject> test(@Body JsonObject param);
+    @Headers("Content-Type: application/json")
+    @POST("tag/setting")
+    Call<JsonObject> tagPost(@Body JsonObject param);
 
-    @POST("test")
-    Call<Map<String, String>> getToken();
+    @GET("tag/setting")
+    Call<JsonObject> tagGet();
 
 }

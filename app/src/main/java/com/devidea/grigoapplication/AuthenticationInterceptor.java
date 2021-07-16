@@ -22,7 +22,7 @@ public class AuthenticationInterceptor implements Interceptor {
         Request original = chain.request();
 
         Request.Builder builder = original.newBuilder()
-                .header("intercepter", authToken);
+                .header("Authorization", authToken);
         Log.d("intercepter-inner", authToken);
         //.header("Authorization", authToken);
 
