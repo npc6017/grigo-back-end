@@ -53,21 +53,16 @@ public class LoginActivity extends AppCompatActivity {
 
         //로그인 시도
         btn_login = findViewById(R.id.btn_login);
-        btn_login.setOnClickListener(view -> {
 
-            /*테스트
-            PrefsHelper.write("email",  "hb1234@naver.com");
-            PrefsHelper.write("name",  "hyeon");
-            PrefsHelper.write("student_id",  "60172171");
-            PrefsHelper.write("phone",  "userDataDTO");
-            PrefsHelper.write("birth",  "123123123");
-            PrefsHelper.write("sex",  "male");
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-            startActivity(intent);
-             */
-            login(et_id.getText().toString(), et_pw.getText().toString());
+        btn_login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
+                LoginActivity.this.login(et_id.getText().toString(), et_pw.getText().toString());
+
+            }
         });
+
     }
 
     public void login(String user_id, String pw) {
