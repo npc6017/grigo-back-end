@@ -8,6 +8,7 @@ import site.grigo.domain.accounttag.AccountTag;
 import site.grigo.domain.accounttag.AccountTagRepository;
 import site.grigo.domain.tag.Tag;
 import site.grigo.domain.tag.TagDTO;
+import site.grigo.domain.tag.TagListDTO;
 import site.grigo.domain.tag.TagRepository;
 import site.grigo.jwt.JwtProvider;
 
@@ -42,8 +43,8 @@ public class TagService {
     }
 
     public void saveTags(String token, List<String> tags) {
+        token = jwtProvider.resolveToken(token);
         String userEmail = jwtProvider.getUserEmail(token);
-
         //tag에 존재하는지 확인한다.
         for(String tag : tags) {
             //존재하지않는다면, tag를 만들어 repo에 넣는다.

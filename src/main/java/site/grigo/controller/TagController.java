@@ -3,11 +3,14 @@ package site.grigo.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import site.grigo.domain.tag.TagDTO;
+import site.grigo.domain.tag.TagListDTO;
 import site.grigo.service.TagService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.Map;
 
 @RequestMapping("/tag")
 @RequiredArgsConstructor
@@ -21,8 +24,12 @@ public class TagController {
         return tagService.getAllTagNames();
     }
 
+    //받은 tag 데이터를 헤더에 존재하는 userEmail을 통하여 tag 정보 추가 및 AccountTagRepo에 입력.
     @PostMapping("/setting")
-    public void setTag(@RequestBody List<String> tags, HttpServletRequest request, HttpServletResponse response) {
+    public void setTag(@RequestBody Map<String, List<String>> test, HttpServletRequest request, HttpServletResponse response) {
+        List<String> tags = test.get("tags");
+        for(String tag : tags)
+            log.info("{}", tag);
         String token = request.getHeader("Authorization");
         tagService.saveTags(token, tags);
         response.setStatus(215);
