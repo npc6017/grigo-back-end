@@ -24,11 +24,12 @@ public interface RetrofitService {
     @POST("login")
     Call<JsonObject> login(@Body JsonObject param);
 
-    @POST("test")
-    Call<JsonObject> test(@Body JsonObject param);
+    @Headers("Content-Type: application/json")
+    @POST("tag/setting")
+    Call<JsonObject> tagPost(@Body JsonObject param);
 
-    @POST("test")
-    Call<Map<String, String>> getToken();
+    @GET("tag/setting")
+    Call<JsonObject> tagGet();
 
     //생일, 전화번호 수정
     @Headers("Content-Type: application/json")

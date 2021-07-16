@@ -16,6 +16,7 @@ public class UserDataDTO implements Serializable {
     private String sex;
     //private String[] tags;
 
+
     public String getEmail() {
         return email;
     }
@@ -37,6 +38,7 @@ public class UserDataDTO implements Serializable {
     }
 
     public void setStudent_id(Integer student_id) {
+
         this.student_id = student_id;
     }
 
@@ -64,12 +66,4 @@ public class UserDataDTO implements Serializable {
         this.sex = sex;
     }
 
-    /*
-    public String[] getTags() {
-        return tags;
-    }
-
-    public void setTags(String[] tags) {
-        this.tags = tags;
-    }*/
 }
