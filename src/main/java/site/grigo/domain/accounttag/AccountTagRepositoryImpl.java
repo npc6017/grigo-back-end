@@ -1,6 +1,7 @@
 package site.grigo.domain.accounttag;
 
 import org.springframework.stereotype.Repository;
+import site.grigo.domain.tag.TagDTO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,11 +22,11 @@ public class AccountTagRepositoryImpl implements AccountTagRepository{
     }
 
     @Override
-    public Optional<List<AccountTag>> findAllByEmail(String email) {
-        List<AccountTag> result = new ArrayList<>();
+    public Optional<List<TagDTO>> findAllByEmail(String email) {
+        List<TagDTO> result = new ArrayList<>();
         for(AccountTag tag : store.values()) {
             if(tag.getEmail().equals(email))
-                result.add(tag);
+                result.add(new TagDTO(tag.getTagName()));
         }
         return Optional.of(result);
     }

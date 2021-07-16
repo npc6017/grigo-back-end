@@ -83,7 +83,7 @@ public class AccountController {
 
             //profileDTO 만들어오기
             ProfileDTO profile = accountService.getProfileFromEmail(account.getEmail());
-            profile.setTags(accountService.getAccountTagsFromEmail(account.getEmail()));
+            profile.setTags(accountService.getAccountTagsFromEmailToString(account.getEmail()));
 
             //만약 태그에 데이터가 존재한다면 상태코드 213
             if(!profile.getTags().isEmpty()) response.setStatus(213);

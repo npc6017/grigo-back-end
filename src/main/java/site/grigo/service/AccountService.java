@@ -14,6 +14,7 @@ import site.grigo.domain.tag.TagDTO;
 import site.grigo.error.BusinessException;
 import site.grigo.jwt.JwtProvider;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -141,8 +142,13 @@ public class AccountService implements UserDetailsService {
         return profile;
     }
 
-    public List<TagDTO> getAccountTagsFromEmail(String email) {
-        return accountTagRepositoryImpl.findAllByEmail(email).get();
+    public List<String> getAccountTagsFromEmailToString(String email) {
+        List<String> res = new ArrayList<>();
+        List<TagDTO> tagDTOS = accountTagRepositoryImpl.findAllByEmail(email).get();
+        for(TagDTO tag : tagDTOS) {
+            res.add(tag.getTagName());
+        }
+        return res;
     }
 
 

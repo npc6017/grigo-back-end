@@ -21,7 +21,7 @@ public class ProfileDTO {
     private String sex;
     // Account tag를 바로쓰는 것 역시 안좋다고 했으니 이를 개선하는 게 좋을 것 같고,
     //
-    private List<TagDTO> tags;
+    private List<String> tags;
 
     public ProfileDTO() {
     }
