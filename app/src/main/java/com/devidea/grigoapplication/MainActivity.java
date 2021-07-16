@@ -28,16 +28,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
-    /*
-    Button signUp;
-    Button login;
-    Button test;
-
-     */
     Toolbar toolbar;
-    ServiceGenerator serviceGenerator;
-    //TokenManager tokenManager;
-    RetrofitService retrofitService;
 
     //Toolbar
     @Override
@@ -48,10 +39,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             //테스트
             case R.id.menu_search:
-                Toast.makeText(this,"검색",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "검색", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.menu_mypage:
                 //Toast.makeText(this,"설정",Toast.LENGTH_SHORT).show();
@@ -59,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
                 return true;
             case R.id.menu_logout:
-                Toast.makeText(this,"로그아웃",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "로그아웃", Toast.LENGTH_SHORT).show();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -67,9 +58,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        PrefsHelper.init(getApplicationContext());
-        serviceGenerator = new ServiceGenerator();
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -78,38 +66,6 @@ public class MainActivity extends AppCompatActivity {
 
         //app 제목 -> 추후에 app 이름 정해지면 수정
         getSupportActionBar().setTitle("Title");
-
-        retrofitService = serviceGenerator.createService(RetrofitService.class);
-/*
-        signUp = findViewById(R.id.signup);
-        login = findViewById(R.id.login);
-        test = findViewById(R.id.test);
-
- */
-/*
-        signUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                serviceGenerator.signup();
-            }
-        });
-
-        login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                serviceGenerator.login();
-            }
-        });
-
-        test.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                serviceGenerator.test();
-            }
-        });
-
-
-*/
 
     }
 

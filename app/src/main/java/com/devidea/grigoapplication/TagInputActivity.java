@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.JsonArray;
@@ -20,10 +21,12 @@ import retrofit2.Response;
 
 import static com.devidea.grigoapplication.LoginActivity.retrofitService;
 
+
 public class TagInputActivity extends AppCompatActivity {
-    EditText editText;
-    Button button;
     TextInputLayout inputLayout;
+    EditText et_tagInput;
+    Button btn_tagSend;
+    TextView tv_tagViewer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,9 +34,13 @@ public class TagInputActivity extends AppCompatActivity {
         setContentView(R.layout.activity_tag_input);
 
         inputLayout = findViewById(R.id.input_layout);
-        EditText editText = inputLayout.getEditText();
+        et_tagInput = inputLayout.getEditText();
+        btn_tagSend = findViewById(R.id.button);
+        tv_tagViewer = findViewById(R.id.tagviewer);
 
-        editText.addTextChangedListener(new TextWatcher() {
+
+        assert et_tagInput != null;
+        et_tagInput.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -54,31 +61,30 @@ public class TagInputActivity extends AppCompatActivity {
             }
         });
 
-        button = findViewById(R.id.button);
 
-        button.setOnClickListener(new View.OnClickListener() {
+
+        btn_tagSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String[] tag = editText.getText().toString().split("#");
-
+                String[] tag = et_tagInput.getText().toString().split("#");
                 tagSend(tag);
-
+                showTag();
             }
 
         });
 
 
+
     }
 
-    private void tagSend(String[] tag){
+    private void tagSend(String[] tags){
         JsonObject jsonObject = new JsonObject();
-        //jsonObject.add("tag",tag);
         JsonArray jsonArray = new JsonArray();
-        for (int i = 1; i < tag.length; i++) {
-            jsonArray.add(tag[i]);
+        for (int i = 1; i < tags.length; i++) {
+            jsonArray.add(tags[i]);
         }
-        jsonObject.add("tag", jsonArray);
-        Log.d("tag", String.valueOf(jsonObject));
+        jsonObject.add("tags", jsonArray);
+        Log.d("tags", String.valueOf(jsonObject));
 
         retrofitService.tagPost(jsonObject).enqueue(new Callback<JsonObject>() {
             @Override
@@ -91,5 +97,22 @@ public class TagInputActivity extends AppCompatActivity {
 
             }
         });
+
     }
+
+    public void showTag(){
+        retrofitService.tagGet().enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                tv_tagViewer.setText(String.valueOf(response.body()));
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+
+            }
+        });
+
+    }
+
 }
