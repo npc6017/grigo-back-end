@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     ServiceGenerator serviceGenerator;
     //TokenManager tokenManager;
     RetrofitService retrofitService;
+    UserDataDTO userDataDTO;
 
     //Toolbar
     @Override
@@ -55,8 +56,9 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             case R.id.menu_mypage:
                 //Toast.makeText(this,"설정",Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(MainActivity.this, MyPageActivity.class);
-                startActivity(intent);
+                Intent mypageIntent = new Intent(MainActivity.this, MyPageActivity.class);
+                mypageIntent.putExtra("userDataDTO",userDataDTO);
+                startActivity(mypageIntent);
                 return true;
             case R.id.menu_logout:
                 Toast.makeText(this,"로그아웃",Toast.LENGTH_SHORT).show();
@@ -80,6 +82,10 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Title");
 
         retrofitService = serviceGenerator.createService(RetrofitService.class);
+
+        Intent getIntent = getIntent();
+        userDataDTO = (UserDataDTO) getIntent.getSerializableExtra("userDataDTO");
+
 /*
         signUp = findViewById(R.id.signup);
         login = findViewById(R.id.login);

@@ -9,7 +9,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+
+import org.json.JSONObject;
 
 import okhttp3.Headers;
 import retrofit2.Call;
@@ -24,6 +27,8 @@ public class LoginActivity extends AppCompatActivity {
     ServiceGenerator serviceGenerator;
     TokenManager tokenManager;
     RetrofitService retrofitService;
+    UserDataDTO userDataDTO;
+    MyPageActivity myPageActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,8 +57,6 @@ public class LoginActivity extends AppCompatActivity {
 
             login(et_id.getText().toString(), et_pw.getText().toString());
 
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-            startActivity(intent);
         });
     }
 
@@ -75,6 +78,15 @@ public class LoginActivity extends AppCompatActivity {
 
                 Log.d("token", tokenManager.get());
 
+
+                Log.d("성공 : ", String.valueOf(response.body()));
+                userDataDTO = new Gson().fromJson(response.body(), UserDataDTO.class);
+                Log.d("email :", userDataDTO.getEmail());
+
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                //userDataDTO 객체 전달
+                intent.putExtra("userDataDTO",userDataDTO);
+                startActivity(intent);
             }
 
             @Override
