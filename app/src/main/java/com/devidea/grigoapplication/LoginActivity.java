@@ -55,6 +55,16 @@ public class LoginActivity extends AppCompatActivity {
         btn_login = findViewById(R.id.btn_login);
         btn_login.setOnClickListener(view -> {
 
+            /*테스트
+            PrefsHelper.write("email",  "hb1234@naver.com");
+            PrefsHelper.write("name",  "hyeon");
+            PrefsHelper.write("student_id",  "60172171");
+            PrefsHelper.write("phone",  "userDataDTO");
+            PrefsHelper.write("birth",  "123123123");
+            PrefsHelper.write("sex",  "male");
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent);
+             */
             login(et_id.getText().toString(), et_pw.getText().toString());
 
         });
@@ -78,14 +88,18 @@ public class LoginActivity extends AppCompatActivity {
 
                 Log.d("token", tokenManager.get());
 
-
                 Log.d("성공 : ", String.valueOf(response.body()));
                 userDataDTO = new Gson().fromJson(response.body(), UserDataDTO.class);
-                Log.d("email :", userDataDTO.getEmail());
+                //userDataDTO에 Mapping된 변수들을 prefs에 저장
+                PrefsHelper.write("email",  userDataDTO.getEmail());
+                PrefsHelper.write("name",  userDataDTO.getName());
+                PrefsHelper.write("student_id",  userDataDTO.getStudent_id());
+                PrefsHelper.write("phone",  userDataDTO.getPhone());
+                PrefsHelper.write("birth",  userDataDTO.getBirth());
+                PrefsHelper.write("sex",  userDataDTO.getSex());
+                //PrefsHelper.write("tags",  userDataDTO.getEmail());
 
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                //userDataDTO 객체 전달
-                intent.putExtra("userDataDTO",userDataDTO);
                 startActivity(intent);
             }
 

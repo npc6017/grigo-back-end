@@ -8,26 +8,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.google.gson.JsonObject;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
 public class MyPageActivity extends AppCompatActivity {
 
     TextView tv_email, tv_name, tv_student_id, tv_sex, tv_phone, tv_birth, tv_tag;
 
     Button btn_updateProfile, btn_updatePass;
-
-    UserDataDTO userDataDTO;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,12 +30,8 @@ public class MyPageActivity extends AppCompatActivity {
         btn_updatePass = findViewById(R.id.btn_updatePass);
         btn_updateProfile = findViewById(R.id.btn_updateProfile);
 
-        Intent getIntent = getIntent();
-        userDataDTO = (UserDataDTO) getIntent.getSerializableExtra("userDataDTO");
-
         btn_updateProfile.setOnClickListener(view -> {
             Intent intent = new Intent(MyPageActivity.this, UpdateProfileActivity.class);
-            intent.putExtra("userDataDTO", userDataDTO);
             startActivity(intent);
         });
 
@@ -65,12 +46,12 @@ public class MyPageActivity extends AppCompatActivity {
 
     public void getAccount(){
 
-        tv_email.setText(userDataDTO.getEmail());
-        tv_name.setText(userDataDTO.getName());
-        tv_birth.setText(userDataDTO.getBirth());
-        tv_student_id.setText(userDataDTO.getStudent_id()+"");
-        tv_sex.setText(userDataDTO.getSex());
-        tv_phone.setText(userDataDTO.getPhone());
-        //tv_tag.setText(userDataDTO.getTags();
+        tv_email.setText(PrefsHelper.read("email", ""));
+        tv_name.setText(PrefsHelper.read("name", ""));
+        tv_birth.setText(PrefsHelper.read("birth", ""));
+        tv_student_id.setText(PrefsHelper.read("student_id", ""));
+        tv_sex.setText(PrefsHelper.read("sex", ""));
+        tv_phone.setText(PrefsHelper.read("phone", ""));
+        //tv_tag.setText(PrefsHelper.read("tags", ""));
     }
 }

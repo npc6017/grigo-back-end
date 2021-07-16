@@ -18,15 +18,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.widget.Toolbar;
 
-import com.google.gson.JsonObject;
-
-import okhttp3.OkHttpClient;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-
 public class MainActivity extends AppCompatActivity {
     /*
     Button signUp;
@@ -38,7 +29,6 @@ public class MainActivity extends AppCompatActivity {
     ServiceGenerator serviceGenerator;
     //TokenManager tokenManager;
     RetrofitService retrofitService;
-    UserDataDTO userDataDTO;
 
     //Toolbar
     @Override
@@ -57,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.menu_mypage:
                 //Toast.makeText(this,"설정",Toast.LENGTH_SHORT).show();
                 Intent mypageIntent = new Intent(MainActivity.this, MyPageActivity.class);
-                mypageIntent.putExtra("userDataDTO",userDataDTO);
+                //mypageIntent.putExtra("userDataDTO",userDataDTO);
                 startActivity(mypageIntent);
                 return true;
             case R.id.menu_logout:
@@ -83,41 +73,7 @@ public class MainActivity extends AppCompatActivity {
 
         retrofitService = serviceGenerator.createService(RetrofitService.class);
 
-        Intent getIntent = getIntent();
-        userDataDTO = (UserDataDTO) getIntent.getSerializableExtra("userDataDTO");
-
-/*
-        signUp = findViewById(R.id.signup);
-        login = findViewById(R.id.login);
-        test = findViewById(R.id.test);
-
- */
-/*
-        signUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                serviceGenerator.signup();
-            }
-        });
-
-        login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                serviceGenerator.login();
-            }
-        });
-
-        test.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                serviceGenerator.test();
-            }
-        });
-
-
-*/
-
+        //Intent getIntent = getIntent();
+        //userDataDTO = (UserDataDTO) getIntent.getSerializableExtra("userDataDTO");
     }
-
-
 }

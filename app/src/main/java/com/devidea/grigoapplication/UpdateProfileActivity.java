@@ -26,9 +26,6 @@ public class UpdateProfileActivity extends AppCompatActivity {
     Button btn_upProfile;
 
     UserDataDTO userDataDTO;
-
-    MyPageActivity myPageActivity;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,9 +34,6 @@ public class UpdateProfileActivity extends AppCompatActivity {
         serviceGenerator = new ServiceGenerator();
         tokenManager = new TokenManager();
         retrofitService = serviceGenerator.createService(RetrofitService.class, tokenManager.get());
-
-        Intent getIntent = getIntent();
-        userDataDTO = (UserDataDTO) getIntent.getSerializableExtra("userDataDTO");
 
         et_updateBirth = findViewById(R.id.et_updateBirth);
         et_updatePhone = findViewById(R.id.et_updatePhone);
@@ -54,18 +48,24 @@ public class UpdateProfileActivity extends AppCompatActivity {
 
         //변경할 생년월일이 빈 값
         if(upBirth.equals("")){
-            upBirth = userDataDTO.getBirth();
+            upBirth = PrefsHelper.read("birth", "");
         }
         //변경할 폰번호가 빈 값
         else if(upPhone.equals("")){
-            upPhone = userDataDTO.getPhone();
+            upPhone = PrefsHelper.read("phone", "");
         }
 
         //변경할 생년월일, 폰번호가 모두 빈 값
         else if(upBirth.equals("") && upPhone.equals("")){
-            upBirth = userDataDTO.getBirth();
-            upPhone = userDataDTO.getPhone();
+            upBirth = PrefsHelper.read("birth", "");
+            upPhone = PrefsHelper.read("phone", "");
         }
+
+        /*테스트
+        PrefsHelper.write("birth",  upBirth);
+        PrefsHelper.write("phone",  upPhone);
+        Intent intent = new Intent(UpdateProfileActivity.this, MyPageActivity.class);
+        startActivity(intent);*/
 
         JsonObject jsonObjectUpProfile = new JsonObject();
 
@@ -76,11 +76,12 @@ public class UpdateProfileActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 userDataDTO = new Gson().fromJson(response.body(), UserDataDTO.class);
+                PrefsHelper.write("birth",  userDataDTO.getBirth());
+                PrefsHelper.write("phone",  userDataDTO.getPhone());
+
                 Intent intent = new Intent(UpdateProfileActivity.this, MyPageActivity.class);
-                //userDataDTO를 수정된 값으로 다시 변경
-                intent.putExtra("userDataDTO",userDataDTO);
                 startActivity(intent);
-                Log.d("변경 : ", String.valueOf(response.body()));
+                //Log.d("변경 : ", String.valueOf(response.body()));
             }
 
             @Override
