@@ -9,9 +9,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import site.grigo.domain.ResponseDTO;
 import site.grigo.domain.account.*;
+import site.grigo.domain.account.exception.AccountInformationIncorrectException;
 import site.grigo.domain.accounttag.AccountTagRepositoryImpl;
 import site.grigo.domain.tag.TagDTO;
-import site.grigo.error.BusinessException;
+import site.grigo.error.ErrorCode;
+import site.grigo.error.exception.BusinessException;
 import site.grigo.jwt.JwtProvider;
 
 import java.util.ArrayList;
@@ -64,7 +66,7 @@ public class AccountService implements UserDetailsService {
 
     private boolean checkEmail(String email) {
         if (accountRepository.findByEmail(email).isPresent()) return true;
-        throw new BusinessException("아이디가 존재하지 않습니다.");
+        throw new AccountInformationIncorrectException("email is not found");
     }
 
     private boolean checkPassword(String email, String password) {
@@ -73,7 +75,7 @@ public class AccountService implements UserDetailsService {
         if (passwordEncoder.matches((CharSequence) password, account.getPassword())) return true;
         log.info("pass : {}, saved pass : {}", password, accountRepository.findByEmail(email).get().getPassword());
         //if(password.equals(accountRepository.findByEmail(email).get().getPassword())) return true;
-        throw new BusinessException("비밀번호가 틀립니다.");
+        throw new AccountInformationIncorrectException("password incorrect");
     }
 
     /** Get Profile Info */
