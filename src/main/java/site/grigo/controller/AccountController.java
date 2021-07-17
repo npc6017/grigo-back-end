@@ -10,6 +10,7 @@ import site.grigo.domain.account.Account;
 import site.grigo.domain.ResponseDTO;
 import site.grigo.domain.account.SignUpJson;
 import site.grigo.domain.account.*;
+import site.grigo.error.exception.EntityNotFoundException;
 import site.grigo.jwt.JwtProvider;
 import site.grigo.service.AccountService;
 import site.grigo.validator.SignUpValidator;
@@ -91,7 +92,7 @@ public class AccountController {
             else response.setStatus(214);
             return profile;
         }
-        return new ProfileDTO(); // 아이디나 비밀번호 틀리면
+        throw new EntityNotFoundException("login invalid");
     }
 
     @ResponseBody

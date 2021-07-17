@@ -12,8 +12,7 @@ import site.grigo.domain.account.*;
 import site.grigo.domain.account.exception.AccountInformationIncorrectException;
 import site.grigo.domain.accounttag.AccountTagRepositoryImpl;
 import site.grigo.domain.tag.TagDTO;
-import site.grigo.error.ErrorCode;
-import site.grigo.error.exception.BusinessException;
+import site.grigo.error.exception.EntityNotFoundException;
 import site.grigo.jwt.JwtProvider;
 
 import java.util.ArrayList;
@@ -61,7 +60,7 @@ public class AccountService implements UserDetailsService {
     //아이디가 존재하는지 찾고, 비밀번호 맞는지 확인하기.
     public boolean checkAccount(String email, String password) {
         if (checkEmail(email) && checkPassword(email, password)) return true;
-        else return false;
+        throw new EntityNotFoundException("login input invalid");
     }
 
     private boolean checkEmail(String email) {
@@ -75,7 +74,7 @@ public class AccountService implements UserDetailsService {
         if (passwordEncoder.matches((CharSequence) password, account.getPassword())) return true;
         log.info("pass : {}, saved pass : {}", password, accountRepository.findByEmail(email).get().getPassword());
         //if(password.equals(accountRepository.findByEmail(email).get().getPassword())) return true;
-        throw new AccountInformationIncorrectException("password incorrect");
+        throw new AccountInformationIncorrectException("password is incorrect");
     }
 
     /** Get Profile Info */
