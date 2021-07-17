@@ -48,8 +48,11 @@ public class TagService {
         //tag에 존재하는지 확인한다.
         for(String tag : tags) {
             //존재하지않는다면, tag를 만들어 repo에 넣는다.
-            if(!tagRepository.tagExist(tag))
+            boolean b = tagRepository.tagExist(tag);
+            if(!b) {
+                log.info("tag : {}, exist : {}", tag, b);
                 tagRepository.save(new Tag(tag));
+            }
 
             //AccountTag Repo에 넣는다.
             AccountTag res = new AccountTag(userEmail, tag);

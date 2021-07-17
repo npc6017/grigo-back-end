@@ -41,7 +41,8 @@ public class TagRepositoryImpl implements TagRepository {
 
     @Override
     public boolean tagExist(String tagName) {
-        if(store.containsValue(tagName)) return true;
+        Optional<Tag> byName = findByName(tagName);
+        if(byName.isPresent()) return true;
         return false;
     }
 }

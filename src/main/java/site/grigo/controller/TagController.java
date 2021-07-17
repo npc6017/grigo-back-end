@@ -9,6 +9,7 @@ import site.grigo.service.TagService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -20,8 +21,11 @@ public class TagController {
     private final TagService tagService; //싱글톤이기 때문에 final이 필요함.
 
     @GetMapping("/setting")
-    public List<String> tagAll() {
-        return tagService.getAllTagNames();
+    @ResponseBody
+    public Map<String, List<String>> tagAll() {
+        Map<String, List<String>> t = new HashMap<>();
+        t.put("tags", tagService.getAllTagNames());
+        return t;
     }
 
     //받은 tag 데이터를 헤더에 존재하는 userEmail을 통하여 tag 정보 추가 및 AccountTagRepo에 입력.
