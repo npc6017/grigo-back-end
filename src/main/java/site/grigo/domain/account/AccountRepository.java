@@ -1,8 +1,12 @@
 package site.grigo.domain.account;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
 import java.util.Optional;
 
-public interface AccountRepository {
+@Repository
+public interface AccountRepository extends JpaRepository<Account, Long> {
 
     // 회원 저장
     Account save(Account account);
@@ -14,12 +18,12 @@ public interface AccountRepository {
     Optional<Account> findByEmail(String email);
 
     // 학번으로 회원 찾기
-    Optional<Account> findByStudentNumber(Integer studentNumber);
+    Optional<Account> findByStudentId(Integer studentId);
 
     // Email 존재 여부 확인하기
     boolean existsByEmail(String email);
 
     // 학번 존재 여부 확인하기
-    boolean existsByStudentNumber(Integer studentNumber);
+    boolean existsByStudentId(Integer studentId);
 
 }

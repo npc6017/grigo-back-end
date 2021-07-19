@@ -10,7 +10,9 @@ import org.springframework.stereotype.Service;
 import site.grigo.domain.ResponseDTO;
 import site.grigo.domain.account.*;
 import site.grigo.domain.account.exception.AccountInformationIncorrectException;
-import site.grigo.domain.accounttag.AccountTagRepositoryImpl;
+import site.grigo.domain.accounttag.AccountTag;
+import site.grigo.domain.accounttag.AccountTagRepository;
+import site.grigo.domain.tag.Tag;
 import site.grigo.domain.tag.TagDTO;
 import site.grigo.error.exception.EntityNotFoundException;
 import site.grigo.jwt.JwtProvider;
@@ -26,7 +28,7 @@ public class AccountService implements UserDetailsService {
     private final AccountRepository accountRepository;
     private final PasswordEncoder passwordEncoder; // Password 인코딩
     private final JwtProvider jwtProvider;
-    private final AccountTagRepositoryImpl accountTagRepositoryImpl;
+    private final AccountTagRepository accountTagRepository;
 
     public void join(SignUpJson signUpJson) {
         // 계정 생성
@@ -139,16 +141,15 @@ public class AccountService implements UserDetailsService {
         profile.setPhone(account.getPhone());
         profile.setSex(account.getSex());
         profile.setName(account.getName());
-        profile.setStudent_id(account.getStudent_id());
+        profile.setStudent_id(account.getStudentId());
         return profile;
     }
 
     public List<String> getAccountTagsFromEmailToString(String email) {
         List<String> res = new ArrayList<>();
-        List<TagDTO> tagDTOS = accountTagRepositoryImpl.findAllByEmail(email).get();
-        for(TagDTO tag : tagDTOS) {
+        List<AccountTag> allByEmail = accountTagRepository.findAllByEmail(email);
+        for(AccountTag tag : allByEmail)
             res.add(tag.getTagName());
-        }
         return res;
     }
 

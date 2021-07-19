@@ -33,7 +33,7 @@ public class SignUpValidator implements Validator {
                     new Object[]{signUpJson.getEmail()}, "이미 사용중인 이메일입니다.");
         }
 
-        if(accountRepository.existsByStudentNumber(signUpJson.getStudent_id())) {
+        if(accountRepository.existsByStudentId(signUpJson.getStudent_id())) {
             errors.rejectValue("student_id", "Invalid.student_id",
                     new Object[]{signUpJson.getStudent_id()}, "이미 가입되어 있는 학번입니다.");
         }

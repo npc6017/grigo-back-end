@@ -5,14 +5,21 @@ import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.util.Collection;
 
+@Entity
 @Getter @Setter
 public class Account implements UserDetails {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String email;
     private String name;
-    private Integer student_id;
+    private Integer studentId;
     private String phone;
     private String birth;
     private String password;
@@ -21,19 +28,16 @@ public class Account implements UserDetails {
     public Account() {
     }
 
-    public Account(String email, String password, String name, String birth, Integer student_id, String sex, String phone) {
+    public Account(String email, String password, String name, String birth, Integer studentId, String sex, String phone) {
         this.email = email;
         this.password = password;
         this.name = name;
         this.birth = birth;
-        this.student_id = student_id;
+        this.studentId = studentId;
         this.sex = sex;
         this.phone = phone;
     }
 
-    public void setId(Long id){
-        this.id = id;
-    }
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;
@@ -67,5 +71,13 @@ public class Account implements UserDetails {
     @Override
     public boolean isEnabled() {
         return false;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getId() {
+        return id;
     }
 }
