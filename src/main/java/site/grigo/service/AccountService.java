@@ -9,11 +9,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import site.grigo.domain.ResponseDTO;
 import site.grigo.domain.account.*;
-import site.grigo.domain.accounttag.AccountTag;
+import site.grigo.domain.account.exception.AccountInformationIncorrectException;
 import site.grigo.domain.accounttag.AccountTagRepositoryImpl;
-import site.grigo.error.BusinessException;
+import site.grigo.domain.tag.TagDTO;
+import site.grigo.error.exception.EntityNotFoundException;
 import site.grigo.jwt.JwtProvider;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -58,12 +60,12 @@ public class AccountService implements UserDetailsService {
     //아이디가 존재하는지 찾고, 비밀번호 맞는지 확인하기.
     public boolean checkAccount(String email, String password) {
         if (checkEmail(email) && checkPassword(email, password)) return true;
-        else return false;
+        throw new EntityNotFoundException("login input invalid");
     }
 
     private boolean checkEmail(String email) {
         if (accountRepository.findByEmail(email).isPresent()) return true;
-        throw new BusinessException("아이디가 존재하지 않습니다.");
+        throw new AccountInformationIncorrectException("email is not found");
     }
 
     private boolean checkPassword(String email, String password) {
@@ -72,7 +74,7 @@ public class AccountService implements UserDetailsService {
         if (passwordEncoder.matches((CharSequence) password, account.getPassword())) return true;
         log.info("pass : {}, saved pass : {}", password, accountRepository.findByEmail(email).get().getPassword());
         //if(password.equals(accountRepository.findByEmail(email).get().getPassword())) return true;
-        throw new BusinessException("비밀번호가 틀립니다.");
+        throw new AccountInformationIncorrectException("password is incorrect");
     }
 
     /** Get Profile Info */
@@ -141,8 +143,13 @@ public class AccountService implements UserDetailsService {
         return profile;
     }
 
-    public List<AccountTag> getAccountTagsFromEmail(String email) {
-        return accountTagRepositoryImpl.findAllByEmail(email).get();
+    public List<String> getAccountTagsFromEmailToString(String email) {
+        List<String> res = new ArrayList<>();
+        List<TagDTO> tagDTOS = accountTagRepositoryImpl.findAllByEmail(email).get();
+        for(TagDTO tag : tagDTOS) {
+            res.add(tag.getTagName());
+        }
+        return res;
     }
 
 

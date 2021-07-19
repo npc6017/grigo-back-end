@@ -7,10 +7,6 @@ import java.util.List;
 
 @Getter
 @Setter
-public class TagDTO {
-    private String tagName;
-
-    public TagDTO(String name) {
-        this.tagName = name;
-    }
+public class TagListDTO {
+    List<String> tags;
 }
