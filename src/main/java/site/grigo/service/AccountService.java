@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import site.grigo.domain.ResponseDTO;
 import site.grigo.domain.account.*;
 import site.grigo.domain.account.exception.AccountInformationIncorrectException;
+import site.grigo.domain.accounttag.AccountTag;
 import site.grigo.domain.accounttag.AccountTagRepository;
 import site.grigo.domain.tag.Tag;
 import site.grigo.domain.tag.TagDTO;
@@ -146,10 +147,9 @@ public class AccountService implements UserDetailsService {
 
     public List<String> getAccountTagsFromEmailToString(String email) {
         List<String> res = new ArrayList<>();
-        List<Tag> tags = accountTagRepository.findAllByEmail(email).get();
-        for(Tag tag : tags) {
-            res.add(tag.getName());
-        }
+        List<AccountTag> allByEmail = accountTagRepository.findAllByEmail(email);
+        for(AccountTag tag : allByEmail)
+            res.add(tag.getTagName());
         return res;
     }
 

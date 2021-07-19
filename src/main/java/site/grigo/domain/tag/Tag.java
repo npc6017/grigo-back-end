@@ -2,11 +2,11 @@ package site.grigo.domain.tag;
 
 import lombok.Getter;
 import lombok.Setter;
+import site.grigo.domain.posttag.PostTag;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -16,6 +16,8 @@ public class Tag {
     private Long id;
     private String name;
     private String category;
+    @OneToMany(mappedBy = "tag")
+    private List<PostTag> posts = new ArrayList<>();
 
     public Tag(String name, String category) {
         this.name = name;

@@ -11,7 +11,7 @@ import java.util.Optional;
 public interface AccountTagRepository extends JpaRepository<AccountTag, Long> {
     public AccountTag save(AccountTag accountTag);
 
-    public Optional<List<Tag>> findAllByEmail(String email);
+    public List<AccountTag> findAllByEmail(String email);
 
     public Optional<List<AccountTag>> findByTagName(String tagName);
 
