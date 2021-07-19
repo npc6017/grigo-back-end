@@ -32,7 +32,7 @@ public class TagService {
     //refactor  필요.
     public List<String> getAllTagNames() {
         List<String> tn = new ArrayList<>();
-        List<Tag> tags = tagRepository.findAll().get();
+        List<Tag> tags = tagRepository.findAll();
         for(Tag t : tags)
             tn.add(t.getName());
 
@@ -45,7 +45,7 @@ public class TagService {
         //tag에 존재하는지 확인한다.
         for(String tag : tags) {
             //존재하지않는다면, tag를 만들어 repo에 넣는다.
-            boolean check = tagRepository.tagExist(tag);
+            boolean check = tagRepository.existsByName(tag);
             if(!check) {
                 log.info("tag : {}, exist : {}", tag, check);
                 tagRepository.save(new Tag(tag));
