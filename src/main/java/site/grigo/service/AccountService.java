@@ -127,7 +127,7 @@ public class AccountService implements UserDetailsService {
     }
 
     /* Token으로 Account 조회 */
-    private Account getAccountToToken(String header) {
+    public Account getAccountToToken(String header) {
         String token = jwtProvider.resolveToken(header);
         String userEmail = jwtProvider.getUserEmail(token);
 

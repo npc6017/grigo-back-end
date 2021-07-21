@@ -3,6 +3,8 @@ package site.grigo.domain.post;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+import site.grigo.domain.account.Account;
+import site.grigo.domain.comment.Comment;
 import site.grigo.domain.posttag.PostTag;
 
 import javax.persistence.*;
@@ -18,11 +20,20 @@ public class Post {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
-    // Account의 id로 변경
-    private String writer;
+
+    /** Post - Account 다대1 관계 설정 */
+    @ManyToOne
+    private Account account;
+
     private String content;
+
+
     @OneToMany(mappedBy = "post")
     private List<PostTag> tags = new ArrayList<>();
+    /** Post - Comment | 1대다 관계 설정 */
+    @OneToMany(mappedBy = "post")
+    private List<Comment> comments = new ArrayList<>();
+
     @Temporal(TemporalType.TIMESTAMP)
     @CreationTimestamp
     private Date timeStamp;

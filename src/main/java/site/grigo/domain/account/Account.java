@@ -4,12 +4,13 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import site.grigo.domain.comment.Comment;
+import site.grigo.domain.post.Post;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Getter @Setter
@@ -24,6 +25,13 @@ public class Account implements UserDetails {
     private String birth;
     private String password;
     private String sex;
+
+   /** Account - Post | 1대다 관계 설정 */
+    @OneToMany(mappedBy = "account")
+    private List<Post> posts = new ArrayList<>();
+    /** Account - Comment | 1대다 관계 설정 */
+    @OneToMany(mappedBy = "account")
+    private List<Comment> comments = new ArrayList<>();
 
     public Account() {
     }
