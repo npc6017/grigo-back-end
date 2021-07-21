@@ -24,15 +24,10 @@ public class PostService {
     private final PostTagRepository postTagRepository;
 
     public void savePost(PostDTO postDTO) {
-        List<Tag> tags = new ArrayList<>();
+
         // 받은 tag이름을 tag에서 가져오는 과정.
-        List<String> tagsFromDto = postDTO.getTag();
-        log.info("{}", tagsFromDto);
-        for(String tag : tagsFromDto) {
-            Optional<Tag> byName = tagRepository.findByName(tag);
-            tags.add(byName.get());
-            log.info("{}", byName.get().getName());
-        }
+        List<Tag> tags = extractTags(postDTO.getTag());
+
         // post를 저장하는 과정.
         Post save = postRepository.save(postMapper(postDTO));
 
@@ -41,17 +36,55 @@ public class PostService {
             postTagRepository.save(new PostTag(save, tag));
     }
 
+    private List<Tag> extractTags(List<String> tagsFromDto) {
+        List<Tag> tags = new ArrayList<>();
+        for(String tag : tagsFromDto) {
+            Optional<Tag> byName = tagRepository.findByName(tag);
+            tags.add(byName.get());
+        }
+        return tags;
+    }
+
+    //존재하는지 확인한 후에 없으면 예외처리.
+    public void deletePost(Long postId) {
+        Optional<Post> post = postRepository.findById(postId);
+        postRepository.delete(post.get());
+    }
+
+    //update할 때, tag가 바뀐다면? 어떻게 해줘야할까
+    //
+    public void updatePost(Long postId, PostDTO postDTO) {
+        List<Tag> tags = extractTags(postDTO.getTag());
+        Post post = postRepository.getById(postId);
+        post.setTitle(postDTO.getTitle());
+        post.setWriter(postDTO.getWriter());
+        post.setContent(postDTO.getContent());
+
+        //tag가 변경되는 경우에는 어떻게 해야할까?
+        //post에 저장된 postTag를 가지고와서, tag를 변경해줘야한다 ?
+        // 추가, 삭제
+
+        postRepository.flush();
+    }
+
+    //존재하는지 확인하고, 없으면 예외.
+    public PostDTO serverPost(Long postId) {
+        Post post = postRepository.findById(postId).get();
+        //byId가 없으면, 예외 던지기
+        return postDTOMapper(post);
+    }
+
     public List<PostDTO> getAllPosts(String type) {
         List<PostDTO> res = new ArrayList<>();
-        List<Post> all = postRepository.findAll();
+        List<Post> allPosts = postRepository.findAll();
         if(type.equals("free")) {
-            for(Post post : all) {
+            for(Post post : allPosts) {
                 PostDTO postDTO = postDTOMapper(post);
                 if(postDTO.getTag().isEmpty()) res.add(postDTO);
             }
             return res;
         }
-        for(Post post : all) {
+        for(Post post : allPosts) {
             PostDTO postDTO = postDTOMapper(post);
             if(!postDTO.getTag().isEmpty()) res.add(postDTO);
         }
