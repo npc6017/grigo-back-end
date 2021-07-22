@@ -49,6 +49,7 @@ public class PostService {
     public void deletePost(Long postId) {
         Optional<Post> post = postRepository.findById(postId);
         postRepository.delete(post.get());
+        postRepository.flush();
     }
 
     //update할 때, tag가 바뀐다면? 어떻게 해줘야할까
@@ -60,10 +61,19 @@ public class PostService {
         post.setWriter(postDTO.getWriter());
         post.setContent(postDTO.getContent());
 
-        //tag가 변경되는 경우에는 어떻게 해야할까?
-        //post에 저장된 postTag를 가지고와서, tag를 변경해줘야한다 ?
-        // 추가, 삭제
 
+        // 이 로직에 단점.
+        // 업데이트 처리가 나면 무조건 삭제하고, 다시 넣는다는 점. == 데이터베이스에 쓸모없는 작동을 야기함.
+        // 해결책. tag가 변경되는지 확인하는 인자가 필요.
+        // 해결책2 : 방식을 변경. -> postTag에서 존재하는 친구들을 찾아서, 삭제해주거나 추가해줌. == 로직이 더러움.
+        // 무엇을 선택 ?
+        List<PostTag> tag = post.getTag();
+        for(PostTag existTag : tag)
+            postTagRepository.delete(existTag);
+        for(Tag updateTag : tags)
+            postTagRepository.save(new PostTag(post, updateTag));
+
+        postTagRepository.flush();
         postRepository.flush();
     }
 
