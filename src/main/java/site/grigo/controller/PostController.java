@@ -20,8 +20,9 @@ public class PostController {
     }
 
     @GetMapping("/question")
-    public String questionBoard() {
-        return "ok";
+    public List<PostDTO> questionBoard() {
+        List<PostDTO> question = postService.getAllPosts("question");
+        return question;
     }
 
     // post 선택했을 때, 가져오는 메소드.

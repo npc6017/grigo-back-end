@@ -67,6 +67,7 @@ public class PostService {
         // 해결책. tag가 변경되는지 확인하는 인자가 필요.
         // 해결책2 : 방식을 변경. -> postTag에서 존재하는 친구들을 찾아서, 삭제해주거나 추가해줌. == 로직이 더러움.
         // 무엇을 선택 ?
+        // 삭제할 tag와 추가할 tag를 list로 결정해서 한다.
         List<PostTag> tag = post.getTag();
         for(PostTag existTag : tag)
             postTagRepository.delete(existTag);
