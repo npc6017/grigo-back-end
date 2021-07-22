@@ -9,7 +9,6 @@ import site.grigo.domain.tag.Tag;
 import site.grigo.domain.tag.TagRepository;
 import site.grigo.jwt.JwtProvider;
 
-import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,14 +19,6 @@ public class TagService {
     private final TagRepository tagRepository;
     private final AccountTagRepository accountTagRepository;
     private final JwtProvider jwtProvider;
-
-    @PostConstruct
-    private void init(){
-        Tag spring = new Tag("Spring", "backend");
-        Tag android = new Tag("Android", "application");
-        tagRepository.save(spring);
-        tagRepository.save(android);
-    }
 
     //refactor  필요.
     public List<String> getAllTagNames() {
