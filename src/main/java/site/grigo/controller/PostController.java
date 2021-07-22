@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import site.grigo.domain.post.PostDTO;
 import site.grigo.service.PostService;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RequestMapping("/posts")
@@ -32,8 +33,8 @@ public class PostController {
     }
 
     @PostMapping("/save")
-    public String savePost(@RequestBody PostDTO postDTO) {
-        postService.savePost(postDTO);
+    public String savePost(HttpServletRequest request, @RequestBody PostDTO postDTO) {
+        postService.savePost(postDTO, request.getHeader("Authorization"));
         return "ok save";
     }
 

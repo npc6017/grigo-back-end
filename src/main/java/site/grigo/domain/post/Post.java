@@ -44,9 +44,9 @@ public class Post {
 
     }
 
-    public Post(String title, String writer, String content) {
+    public Post(String title, Account account, String content) {
         this.title = title;
-        this.writer = writer;
+        this.account = account;
         this.content = content;
     }
 }
