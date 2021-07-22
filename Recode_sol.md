@@ -66,4 +66,28 @@
       PasswordUpdateDTO 작성 : current, new, confirm 총 3개의 비밀번호를 갖는 DTO 작성.
 >
 > > - service 패키지  
-      AccountService 수정 : 요청받은 3가지의 비밀번호를 통해 currentPassword 확인, 새로운 비밀번호의 중복 여부를 확인하여 비밀번호 변경 또는 불가능 사유 ResponseDTO 생성하여 반환.     
+      AccountService 수정 : 요청받은 3가지의 비밀번호를 통해 currentPassword 확인, 새로운 비밀번호의 중복 여부를 확인하여 비밀번호 변경 또는 불가능 사유 ResponseDTO 생성하여 반환.
+      > ## 7월 13일 (화)
+> ## 7월 20일 (수)
+> > ### 구현
+> > - Account - Comment, Post | Post - Comment 관계 설정
+> > - Comment Add Update Delete 구현
+>
+> > - controller 패키지  
+> >    - CommentController 수정
+> >     1. Comment Add : 유저 확인 -> 게시글 유무 확인 -> 댓글 추가.
+> >     2. Comment Update : 유저 확인 ->  댓글 유무 확인 -> 유저 댓글 소유권 확인 -> 댓글 수정
+> >     3. Comment Delete : 유저 확인 -> 댓글 유무 확인 -> 유저 댓글 소유권 확인 -> 댓글 삭제
+>
+> > - domain  
+> >    - Account  
+> >     1. Account - Post | 1대다 관계 설정
+> >     2. Account - Comment | 1대다 관계 설정
+> >    - Comment 
+> >     1. Comment 도메인 작성
+> >     2. Comment - Account | 다대1 관계 설정
+> >     3. Comment - Post | 다대1 관계 설정  
+> >     3. CommentDTO 작성
+> >    - Post
+> >     1. Post - Account 다대1 관계 설정
+> >     2. Post - Comment | 1대다 관계 설정

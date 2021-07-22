@@ -22,11 +22,11 @@ public class MainController {
         return "ok";
     }
 
-    @ResponseBody
-    @PostMapping("/home/test")
-    public Post test(@RequestBody Post post) {
-        log.info("{}, {}, {}", post.getContent(), post.getTitle(), post.getWriter());
-        Post save = postRepository.save(post);
-        return save;
-    }
+//    @ResponseBody
+//    @PostMapping("/home/test")
+//    public Post test(@RequestBody Post post) {
+//        log.info("{}, {}, {}", post.getContent(), post.getTitle(), post.getWriter());
+//        Post save = postRepository.save(post);
+//        return save;
+//    }
 }
