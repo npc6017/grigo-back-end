@@ -3,6 +3,7 @@ package site.grigo.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import site.grigo.domain.account.Account;
 import site.grigo.domain.post.Post;
 import site.grigo.domain.post.PostDTO;
 import site.grigo.domain.post.PostRepository;
@@ -22,14 +23,15 @@ public class PostService {
     private final PostRepository postRepository;
     private final TagRepository tagRepository;
     private final PostTagRepository postTagRepository;
+    private final AccountService accountService;
 
-    public void savePost(PostDTO postDTO) {
-
+    public void savePost(PostDTO postDTO, String header) {
+        Account account = accountService.getAccountToToken(header);
         // 받은 tag이름을 tag에서 가져오는 과정.
         List<Tag> tags = extractTags(postDTO.getTag());
 
         // post를 저장하는 과정.
-        Post save = postRepository.save(postMapper(postDTO));
+        Post save = postRepository.save(postMapper(postDTO, account));
 
         // tag와 post를 postTag로 저장하는 과정.
         for(Tag tag : tags)
@@ -58,7 +60,6 @@ public class PostService {
         List<Tag> tags = extractTags(postDTO.getTag());
         Post post = postRepository.getById(postId);
         post.setTitle(postDTO.getTitle());
-        post.setWriter(postDTO.getWriter());
         post.setContent(postDTO.getContent());
 
 
@@ -107,10 +108,10 @@ public class PostService {
         for(PostTag tag : post.getTag())
             tags.add(tag.getTag().getName());
 
-        return new PostDTO(post.getId(), post.getTitle(), post.getWriter(), post.getContent(), tags, post.getTimeStamp());
+        return new PostDTO(post.getId(), post.getTitle(), post.getAccount().getName(), post.getContent(), tags, post.getTimeStamp());
     }
 
-    private Post postMapper(PostDTO postDTO) {
-        return new Post(postDTO.getTitle(), postDTO.getWriter(), postDTO.getContent());
+    private Post postMapper(PostDTO postDTO, Account account) {
+        return new Post(postDTO.getTitle(), account, postDTO.getContent());
     }
 }
