@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import site.grigo.domain.account.Account;
+import site.grigo.domain.comment.Comment;
+import site.grigo.domain.comment.CommentDTO;
 import site.grigo.domain.post.Post;
 import site.grigo.domain.post.PostDTO;
 import site.grigo.domain.post.PostRepository;
@@ -25,6 +27,7 @@ public class PostService {
     private final PostTagRepository postTagRepository;
     private final AccountService accountService;
 
+    //save에서 comment를 받을 필요는 없음. 처음 포스트하는데 댓글이 있을리 없기 때문에.
     public void savePost(PostDTO postDTO, String header) {
         Account account = accountService.getAccountToToken(header);
         // 받은 tag이름을 tag에서 가져오는 과정.
@@ -89,26 +92,32 @@ public class PostService {
     public List<PostDTO> getAllPosts(String type) {
         List<PostDTO> res = new ArrayList<>();
         List<Post> allPosts = postRepository.findAllByBoardType(type);
-        if(type.equals("free")) {
-            for(Post post : allPosts) {
-                PostDTO postDTO = postDTOMapper(post);
-                if(postDTO.getTag().isEmpty()) res.add(postDTO);
-            }
-            return res;
-        }
+
         for(Post post : allPosts) {
-            PostDTO postDTO = postDTOMapper(post);
-            if(!postDTO.getTag().isEmpty()) res.add(postDTO);
+            res.add(postDTOMapper(post));
         }
+
         return res;
     }
 
     private PostDTO postDTOMapper(Post post) {
         List<String> tags = new ArrayList<>();
+        List<CommentDTO> commentDTOS = new ArrayList<>();
+
+        // post에 속한 태그들 dto로 변환
         for(PostTag tag : post.getTag())
             tags.add(tag.getTag().getName());
 
-        return new PostDTO(post.getId(), post.getTitle(), post.getAccount().getName(), post.getContent(), post.getBoardType(), tags, post.getTimeStamp());
+        // post에 속한 comment들 dto로 변환
+        for(Comment comment : post.getComments())
+            commentDTOS.add(commentDTOMapper(comment));
+
+
+        return new PostDTO(post.getId(), post.getTitle(), post.getAccount().getName(), post.getContent(), post.getBoardType(), tags, commentDTOS, post.getTimeStamp());
+    }
+
+    private CommentDTO commentDTOMapper(Comment comment) {
+        return new CommentDTO(comment.getId(), comment.getContent(), comment.getTimeStamp());
     }
 
     private Post postMapper(PostDTO postDTO, Account account) {
