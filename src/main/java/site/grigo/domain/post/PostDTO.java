@@ -4,10 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 import site.grigo.domain.comment.CommentDTO;
 import site.grigo.domain.posttag.PostTag;
-import site.grigo.domain.tag.Tag;
-
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Getter @Setter
@@ -19,15 +17,16 @@ public class PostDTO {
     private String boardType;
     private List<String> tag = new ArrayList<>();
     private List<CommentDTO> comments = new ArrayList<>();
-    private Date timeStamp;
+    private LocalDateTime timeStamp;
 
-    public PostDTO(Long id, String title, String writer, String content, String boardType, List<String> tags, Date timeStamp) {
+    public PostDTO(Long id, String title, String writer, String content, String boardType, List<String> tags, List<CommentDTO> comments, LocalDateTime timeStamp) {
         this.id = id;
         this.title = title;
         this.writer = writer;
         this.content = content;
         this.boardType = boardType;
         this.tag = tags;
+        this.comments = comments;
         this.timeStamp = timeStamp;
     }
 

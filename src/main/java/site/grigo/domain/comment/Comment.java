@@ -7,6 +7,7 @@ import site.grigo.domain.account.Account;
 import site.grigo.domain.post.Post;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -23,9 +24,8 @@ public class Comment {
     private Post post;
 
     private String content;
-    @Temporal(TemporalType.TIMESTAMP)
     @CreationTimestamp
-    private Date timeStamp;
+    private LocalDateTime timeStamp;
 
 
 }

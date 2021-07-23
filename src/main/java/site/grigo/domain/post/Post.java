@@ -8,8 +8,9 @@ import site.grigo.domain.comment.Comment;
 import site.grigo.domain.posttag.PostTag;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -35,9 +36,8 @@ public class Post {
     @OneToMany(mappedBy = "post")
     private List<Comment> comments = new ArrayList<>();
 
-    @Temporal(TemporalType.TIMESTAMP)
     @CreationTimestamp
-    private Date timeStamp;
+    private LocalDateTime timeStamp;
 
 
     public Post() {
