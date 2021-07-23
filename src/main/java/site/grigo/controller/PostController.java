@@ -1,11 +1,16 @@
 package site.grigo.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import lombok.RequiredArgsConstructor;
+import org.apache.tomcat.util.json.JSONParser;
 import org.springframework.web.bind.annotation.*;
 import site.grigo.domain.post.PostDTO;
 import site.grigo.service.PostService;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.List;
 
 @RequestMapping("/posts")
@@ -15,15 +20,20 @@ public class PostController {
     private final PostService postService;
 
     @GetMapping("/free")
-    public List<PostDTO> freeBoard() {
+    @ResponseBody
+    public HashMap<String, List<PostDTO>> freeBoard(){
         List<PostDTO> free = postService.getAllPosts("free");
-        return free;
+        HashMap<String, List<PostDTO>> res = new HashMap<>();
+        res.put("post", free);
+        return res;
     }
 
     @GetMapping("/question")
-    public List<PostDTO> questionBoard() {
+    public HashMap<String, List<PostDTO>> questionBoard() {
         List<PostDTO> question = postService.getAllPosts("question");
-        return question;
+        HashMap<String, List<PostDTO>> res = new HashMap<>();
+        res.put("post", question);
+        return res;
     }
 
     // post 선택했을 때, 가져오는 메소드.
