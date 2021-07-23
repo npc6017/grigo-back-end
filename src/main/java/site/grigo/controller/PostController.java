@@ -20,20 +20,13 @@ public class PostController {
     private final PostService postService;
 
     @GetMapping("/free")
-    @ResponseBody
-    public HashMap<String, List<PostDTO>> freeBoard(){
-        List<PostDTO> free = postService.getAllPosts("free");
-        HashMap<String, List<PostDTO>> res = new HashMap<>();
-        res.put("post", free);
-        return res;
+    public List<PostDTO> freeBoard(){
+        return postService.getAllPosts("free");
     }
 
     @GetMapping("/question")
-    public HashMap<String, List<PostDTO>> questionBoard() {
-        List<PostDTO> question = postService.getAllPosts("question");
-        HashMap<String, List<PostDTO>> res = new HashMap<>();
-        res.put("post", question);
-        return res;
+    public List<PostDTO> questionBoard() {
+        return postService.getAllPosts("question");
     }
 
     // post 선택했을 때, 가져오는 메소드.
