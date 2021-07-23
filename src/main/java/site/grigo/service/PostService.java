@@ -88,7 +88,7 @@ public class PostService {
 
     public List<PostDTO> getAllPosts(String type) {
         List<PostDTO> res = new ArrayList<>();
-        List<Post> allPosts = postRepository.findAll();
+        List<Post> allPosts = postRepository.findAllByBoardType(type);
         if(type.equals("free")) {
             for(Post post : allPosts) {
                 PostDTO postDTO = postDTOMapper(post);
