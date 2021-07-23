@@ -2,6 +2,7 @@ package site.grigo.domain.post;
 
 import lombok.Getter;
 import lombok.Setter;
+import site.grigo.domain.comment.CommentDTO;
 import site.grigo.domain.posttag.PostTag;
 import site.grigo.domain.tag.Tag;
 
@@ -15,14 +16,17 @@ public class PostDTO {
     private String title;
     private String writer;
     private String content;
+    private String boardType;
     private List<String> tag = new ArrayList<>();
+    private List<CommentDTO> comments = new ArrayList<>();
     private Date timeStamp;
 
-    public PostDTO(Long id, String title, String writer, String content, List<String> tags, Date timeStamp) {
+    public PostDTO(Long id, String title, String writer, String content, String boardType, List<String> tags, Date timeStamp) {
         this.id = id;
         this.title = title;
         this.writer = writer;
         this.content = content;
+        this.boardType = boardType;
         this.tag = tags;
         this.timeStamp = timeStamp;
     }

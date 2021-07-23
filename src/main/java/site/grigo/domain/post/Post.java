@@ -27,7 +27,7 @@ public class Post {
     private Account account;
 
     private String content;
-
+    private String boardType;
 
     @OneToMany(mappedBy = "post")
     private List<PostTag> tag = new ArrayList<>();
@@ -44,9 +44,10 @@ public class Post {
 
     }
 
-    public Post(String title, Account account, String content) {
+    public Post(String title, Account account, String content, String boardType) {
         this.title = title;
         this.account = account;
         this.content = content;
+        this.boardType = boardType;
     }
 }

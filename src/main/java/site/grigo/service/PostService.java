@@ -108,10 +108,10 @@ public class PostService {
         for(PostTag tag : post.getTag())
             tags.add(tag.getTag().getName());
 
-        return new PostDTO(post.getId(), post.getTitle(), post.getAccount().getName(), post.getContent(), tags, post.getTimeStamp());
+        return new PostDTO(post.getId(), post.getTitle(), post.getAccount().getName(), post.getContent(), post.getBoardType(), tags, post.getTimeStamp());
     }
 
     private Post postMapper(PostDTO postDTO, Account account) {
-        return new Post(postDTO.getTitle(), account, postDTO.getContent());
+        return new Post(postDTO.getTitle(), account, postDTO.getContent(), postDTO.getBoardType());
     }
 }
