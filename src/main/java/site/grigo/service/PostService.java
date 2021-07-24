@@ -98,15 +98,15 @@ public class PostService {
         for(Post post : posts)
             postDTOS.add(postDTOMapper(post));
 
-        return new CursorPage<>(postDTOS, hasNext(lastId));
+        return new CursorPage<>(postDTOS, hasNext(lastId, boardType));
     }
 
     /**
      * 다음 페이지가 존재하는지에 대한 메소드
      */
-    private Boolean hasNext(Long id) {
+    private Boolean hasNext(Long id, String boardType) {
         if(id == null) return false;
-        return postRepository.existsByIdLessThan(id);
+        return postRepository.existsByBoardTypeAndIdLessThan(boardType, id);
     }
 
     /**

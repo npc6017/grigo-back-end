@@ -22,5 +22,5 @@ public interface PostRepository extends JpaRepository<Post, Long> {
      * 마지막으로 받은 id 이후에 post들을 page 설정에 맞게 가져온다.
      */
     List<Post> findByBoardTypeAndIdLessThanOrderByIdDesc(Pageable page, String boardType, Long id);
-    Boolean existsByIdLessThan(Long id);
+    Boolean existsByBoardTypeAndIdLessThan(String boardType, Long id);
 }
