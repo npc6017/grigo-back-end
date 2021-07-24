@@ -2,10 +2,12 @@ package site.grigo.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import site.grigo.domain.account.Account;
 import site.grigo.domain.comment.Comment;
 import site.grigo.domain.comment.CommentDTO;
+import site.grigo.domain.post.CursorPage;
 import site.grigo.domain.post.Post;
 import site.grigo.domain.post.PostDTO;
 import site.grigo.domain.post.PostRepository;
@@ -89,15 +91,38 @@ public class PostService {
         return postDTOMapper(post);
     }
 
-    public List<PostDTO> getAllPosts(String type) {
-        List<PostDTO> res = new ArrayList<>();
-        List<Post> allPosts = postRepository.findAllByBoardType(type);
+    /** 해당되는 페이지에 대한 postDTO를 만들어주는 메소드.
+     */
+    public CursorPage<PostDTO> get(Long id, Pageable page, String boardType) {
+        List<PostDTO> postDTOS = new ArrayList<>();
+        final List<Post> posts = getPosts(id, page, boardType);
+        Long lastId = posts.isEmpty() ?
+                null : posts.get(posts.size() - 1).getId();
 
-        for(Post post : allPosts) {
-            res.add(postDTOMapper(post));
-        }
+        for(Post post : posts)
+            postDTOS.add(postDTOMapper(post));
 
-        return res;
+        return new CursorPage<>(postDTOS, hasNext(lastId));
+    }
+
+    /**
+     * 다음 페이지가 존재하는지에 대한 메소드
+     */
+    private Boolean hasNext(Long id) {
+        if(id == null) return false;
+        return postRepository.existsByIdLessThan(id);
+    }
+
+    /**
+     * DB에서 받았던 마지막 id의 이후 post들을 받아온다.
+     * 만약 애플리케이션에서 첫번째 페이지를 입력받을 때는 id가 null로 올 것이므로,
+     * null일 때는 가장 먼저 나와야하는 page를 return 해준다.
+     * 그 후로는, 마지막으로 받은 id가 존재하기 때문에, page size에 맞춰서 해당하는 id 이후에 존재하는 post들을 return해준다.
+     */
+    public List<Post> getPosts(Long id, Pageable page, String boardType) {
+        return id == null ?
+                postRepository.findByBoardTypeOrderByIdDesc(page, boardType) :
+                postRepository.findByBoardTypeAndIdLessThanOrderByIdDesc(page, boardType, id);
     }
 
     private PostDTO postDTOMapper(Post post) {

@@ -1,32 +1,39 @@
 package site.grigo.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.util.JSONPObject;
 import lombok.RequiredArgsConstructor;
-import org.apache.tomcat.util.json.JSONParser;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
+import site.grigo.domain.post.CursorPage;
 import site.grigo.domain.post.PostDTO;
 import site.grigo.service.PostService;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
-import java.util.List;
 
 @RequestMapping("/posts")
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 public class PostController {
+    private static final int DEFAULT_SIZE = 10;
     private final PostService postService;
 
+    /**
+     * 시작하는 postId와 한 페이지당 들어가야할 size를 입력받는다.
+     * 마지막으로 받은 id와 size를 입력받는다.
+     * pogeRequest는 페이지를 만들어주는 역할을 한다.
+     * pogeRequest.of(0, size)의 의미는 0번부터 페이지를 만들어서 넘긴다는 의미이다.
+     */
     @GetMapping("/free")
-    public List<PostDTO> freeBoard(){
-        return postService.getAllPosts("free");
+    public CursorPage<PostDTO> freeBoard(Long id, Integer size){
+        if(size == null) size = DEFAULT_SIZE;
+        return postService.get(id, PageRequest.of(0, size), "free");
     }
 
     @GetMapping("/question")
-    public List<PostDTO> questionBoard() {
-        return postService.getAllPosts("question");
+    public CursorPage<PostDTO> questionBoard(Long id, Integer size) {
+        if(size == null) size = DEFAULT_SIZE;
+        return postService.get(id, PageRequest.of(0, size), "question");
     }
 
     // post 선택했을 때, 가져오는 메소드.
