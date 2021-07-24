@@ -67,7 +67,6 @@ public class PostService {
         post.setTitle(postDTO.getTitle());
         post.setContent(postDTO.getContent());
 
-
         // 이 로직에 단점.
         // 업데이트 처리가 나면 무조건 삭제하고, 다시 넣는다는 점. == 데이터베이스에 쓸모없는 작동을 야기함.
         // 해결책. tag가 변경되는지 확인하는 인자가 필요.
@@ -79,9 +78,6 @@ public class PostService {
             postTagRepository.delete(existTag);
         for(Tag updateTag : tags)
             postTagRepository.save(new PostTag(post, updateTag));
-
-        postTagRepository.flush();
-        postRepository.flush();
     }
 
     //존재하는지 확인하고, 없으면 예외.
