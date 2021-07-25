@@ -30,7 +30,7 @@ public class PostService {
     private final TagRepository tagRepository;
     private final PostTagRepository postTagRepository;
     private final AccountService accountService;
-    private final Integer commentLength = 35;
+    private final Integer contentLength = 35;
 
     //save에서 comment를 받을 필요는 없음. 처음 포스트하는데 댓글이 있을리 없기 때문에.
     public void savePost(PostDTO postDTO, String header) {
@@ -125,8 +125,8 @@ public class PostService {
         for(PostDTO postDTO : postDTOS) {
             st = new StringBuffer();
             String content = postDTO.getContent();
-            if(content.length() > commentLength) {
-                st.append(content, 0, commentLength + 1);
+            if(content.length() > contentLength) {
+                st.append(content, 0, contentLength + 1);
                 st.append("...");
             }
             else st.append(content);
