@@ -97,7 +97,7 @@ public class PostService {
 
     /** 해당되는 페이지에 대한 postDTO를 만들어주는 메소드.
      */
-    public CursorPage<PostDTO> get(Long id, Pageable page, String boardType) {
+    public CursorPage get(Long id, Pageable page, String boardType) {
         List<PostDTO> postDTOS = new ArrayList<>();
         final List<Post> posts = getPosts(id, page, boardType);
         Long lastId = posts.isEmpty() ?
@@ -107,8 +107,10 @@ public class PostService {
             postDTOS.add(postDTOMapper(post));
 
         postDTOS = contentSplit(postDTOS);
+        CursorPage postDTOCursorPage = new CursorPage(postDTOS, hasNext(lastId, boardType));
+        System.out.println(postDTOCursorPage.getPostDTOS().get(0).getContent());
 
-        return new CursorPage<>(postDTOS, hasNext(lastId, boardType));
+        return postDTOCursorPage;
     }
 
     /** 내용 원하는 길이만큼 잘라서 주기

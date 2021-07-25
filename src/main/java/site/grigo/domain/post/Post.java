@@ -8,7 +8,6 @@ import site.grigo.domain.comment.Comment;
 import site.grigo.domain.posttag.PostTag;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;

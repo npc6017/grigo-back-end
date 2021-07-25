@@ -13,11 +13,11 @@ import java.util.List;
  */
 
 @Getter @Setter
-public class CursorPage<T> {
-    private List<T> postDTOS;
+public class CursorPage {
+    private List<PostDTO> postDTOS;
     private Boolean hasNext;
 
-    public CursorPage(List<T> postDTOS, Boolean hasNext) {
+    public CursorPage(List<PostDTO> postDTOS, Boolean hasNext) {
         this.postDTOS = postDTOS;
         this.hasNext = hasNext;
     }

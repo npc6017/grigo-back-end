@@ -27,13 +27,15 @@ public class PostController {
      * pogeRequest.of(0, size)의 의미는 0번부터 페이지를 만들어서 넘긴다는 의미이다.
      */
     @GetMapping("/free")
-    public CursorPage<PostDTO> freeBoard(Long id, Integer size){
+    public CursorPage freeBoard(@RequestParam(value = "id") Long id, @RequestParam(value = "size") Integer size){
+        System.out.println(id + "  " + size);
         if(size == null) size = DEFAULT_SIZE;
         return postService.get(id, PageRequest.of(0, size), "free");
     }
 
     @GetMapping("/question")
-    public CursorPage<PostDTO> questionBoard(Long id, Integer size) {
+    public CursorPage questionBoard(@RequestParam(value = "id") Long id, @RequestParam(value = "size") Integer size) {
+        System.out.println(id + "  " + size);
         if(size == null) size = DEFAULT_SIZE;
         return postService.get(id, PageRequest.of(0, size), "question");
     }
