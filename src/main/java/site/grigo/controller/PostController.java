@@ -53,15 +53,15 @@ public class PostController {
 
     //ResponseEntity로 결과 알려주기.
     @PostMapping("/{postId}/delete")
-    public ResponseEntity deletePost(@PathVariable Long postId) {
-        postService.deletePost(postId);
+    public ResponseEntity deletePost(HttpServletRequest request, @PathVariable Long postId) {
+        postService.deletePost(postId, request.getHeader("Authorization"));
         return new ResponseEntity("post delete successful", HttpStatus.OK);
     }
 
     //ResponseEntity로 결과 알려주기.
     @PostMapping("/{postId}/update")
-    public ResponseEntity updatePost(@PathVariable Long postId, @RequestBody PostDTO postDTO) {
-        postService.updatePost(postId, postDTO);
+    public ResponseEntity updatePost(HttpServletRequest request, @PathVariable Long postId, @RequestBody PostDTO postDTO) {
+        postService.updatePost(postId, postDTO, request.getHeader("Authorization"));
         return new ResponseEntity("post update successful", HttpStatus.OK);
     }
 }

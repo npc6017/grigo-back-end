@@ -11,6 +11,7 @@ import site.grigo.domain.post.CursorPage;
 import site.grigo.domain.post.Post;
 import site.grigo.domain.post.PostDTO;
 import site.grigo.domain.post.PostRepository;
+import site.grigo.domain.post.exception.PostAccountAndLoginAccountMisMatchException;
 import site.grigo.domain.post.exception.PostNotFoundException;
 import site.grigo.domain.posttag.PostTag;
 import site.grigo.domain.posttag.PostTagRepository;
@@ -54,18 +55,25 @@ public class PostService {
     }
 
     // 존재하는지 확인한 후에 없으면 예외처리.
-    // 로그인한 사람과 post의 작성자가 동일한지 확인해야함.
-    public void deletePost(Long postId) {
+    public void deletePost(Long postId, String header) {
+        Account account = accountService.getAccountToToken(header);
         Optional<Post> post = postRepository.findById(postId);
+
+        // 로그인한 계정과 post의 작성자가 동일한지 확인. 아니면 exception 발생.
+        if(!post.get().getAccount().equals(account)) throw new PostAccountAndLoginAccountMisMatchException();
         if(!post.isPresent()) throw new PostNotFoundException("delete");
         postRepository.delete(post.get());
     }
 
     // update할 때, tag가 바뀐다면? 어떻게 해줘야할까
-    // 로그인한 사람과 post의 작성자가 동일한지 확인해야함.
-    public void updatePost(Long postId, PostDTO postDTO) {
+    public void updatePost(Long postId, PostDTO postDTO, String header) {
+        Account account = accountService.getAccountToToken(header);
         List<Tag> tags = extractTags(postDTO.getTag());
         Post post = postRepository.getById(postId);
+
+        // 로그인한 계정과 post의 작성자가 동일한지 확인. 아니면 exception 발생.
+        if(!post.getAccount().equals(account)) throw new PostAccountAndLoginAccountMisMatchException();
+
         post.setTitle(postDTO.getTitle());
         post.setContent(postDTO.getContent());
 

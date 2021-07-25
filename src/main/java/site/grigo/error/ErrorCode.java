@@ -1,7 +1,8 @@
 package site.grigo.error;
 
 public enum ErrorCode {
-    LOGIN_INPUT_INVALID(400, "M002", "Login input is invalid");
+    LOGIN_INPUT_INVALID(400, "B002", "Login input is invalid"),
+    PERMISSION_DENIED(401, "B003", "Change permission denied");
 
     private final int status;
     private final String code;
