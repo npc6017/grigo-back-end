@@ -11,6 +11,7 @@ import site.grigo.domain.post.CursorPage;
 import site.grigo.domain.post.Post;
 import site.grigo.domain.post.PostDTO;
 import site.grigo.domain.post.PostRepository;
+import site.grigo.domain.post.exception.PostNotFoundException;
 import site.grigo.domain.posttag.PostTag;
 import site.grigo.domain.posttag.PostTagRepository;
 import site.grigo.domain.tag.Tag;
@@ -52,27 +53,24 @@ public class PostService {
         return tags;
     }
 
-    //존재하는지 확인한 후에 없으면 예외처리.
+    // 존재하는지 확인한 후에 없으면 예외처리.
+    // 로그인한 사람과 post의 작성자가 동일한지 확인해야함.
     public void deletePost(Long postId) {
         Optional<Post> post = postRepository.findById(postId);
+        if(!post.isPresent()) throw new PostNotFoundException("delete");
         postRepository.delete(post.get());
-        postRepository.flush();
     }
 
-    //update할 때, tag가 바뀐다면? 어떻게 해줘야할까
-    //
+    // update할 때, tag가 바뀐다면? 어떻게 해줘야할까
+    // 로그인한 사람과 post의 작성자가 동일한지 확인해야함.
     public void updatePost(Long postId, PostDTO postDTO) {
         List<Tag> tags = extractTags(postDTO.getTag());
         Post post = postRepository.getById(postId);
         post.setTitle(postDTO.getTitle());
         post.setContent(postDTO.getContent());
 
-        // 이 로직에 단점.
-        // 업데이트 처리가 나면 무조건 삭제하고, 다시 넣는다는 점. == 데이터베이스에 쓸모없는 작동을 야기함.
-        // 해결책. tag가 변경되는지 확인하는 인자가 필요.
-        // 해결책2 : 방식을 변경. -> postTag에서 존재하는 친구들을 찾아서, 삭제해주거나 추가해줌. == 로직이 더러움.
-        // 무엇을 선택 ?
-        // 삭제할 tag와 추가할 tag를 list로 결정해서 한다.
+        // 애플리케이션 단에서 삭제되고 추가되는 데이터들을 받은 후에, 그에 맞게 업데이트하기.
+        // -> 로직 변경. 현준&현배와 이야기하기.
         List<PostTag> tag = post.getTag();
         for(PostTag existTag : tag)
             postTagRepository.delete(existTag);
@@ -81,10 +79,11 @@ public class PostService {
     }
 
     //존재하는지 확인하고, 없으면 예외.
-    public PostDTO serverPost(Long postId) {
-        Post post = postRepository.findById(postId).get();
+    public PostDTO servePost(Long postId) {
+        Optional<Post> byId = postRepository.findById(postId);
         //byId가 없으면, 예외 던지기
-        return postDTOMapper(post);
+        if(!byId.isPresent()) throw new PostNotFoundException("select");
+        return postDTOMapper(byId.get());
     }
 
     /** 해당되는 페이지에 대한 postDTO를 만들어주는 메소드.

@@ -39,21 +39,24 @@ public class PostController {
     // post 선택했을 때, 가져오는 메소드.
     @GetMapping("/{postId}")
     public PostDTO selectPost(@PathVariable Long postId) {
-        return postService.serverPost(postId);
+        return postService.servePost(postId);
     }
 
+    //ResponseEntity로 결과 알려주기.
     @PostMapping("/save")
     public String savePost(HttpServletRequest request, @RequestBody PostDTO postDTO) {
         postService.savePost(postDTO, request.getHeader("Authorization"));
         return "ok save";
     }
 
+    //ResponseEntity로 결과 알려주기.
     @PostMapping("/{postId}/delete")
     public String deletePost(@PathVariable Long postId) {
         postService.deletePost(postId);
         return "delete ok";
     }
 
+    //ResponseEntity로 결과 알려주기.
     @PostMapping("/{postId}/update")
     public String updatePost(@PathVariable Long postId, @RequestBody PostDTO postDTO) {
         postService.updatePost(postId, postDTO);
