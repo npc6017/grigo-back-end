@@ -3,6 +3,8 @@ package site.grigo.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import site.grigo.domain.post.CursorPage;
 import site.grigo.domain.post.PostDTO;
@@ -44,22 +46,22 @@ public class PostController {
 
     //ResponseEntity로 결과 알려주기.
     @PostMapping("/save")
-    public String savePost(HttpServletRequest request, @RequestBody PostDTO postDTO) {
+    public ResponseEntity savePost(HttpServletRequest request, @RequestBody PostDTO postDTO) {
         postService.savePost(postDTO, request.getHeader("Authorization"));
-        return "ok save";
+        return new ResponseEntity("post save successful", HttpStatus.OK);
     }
 
     //ResponseEntity로 결과 알려주기.
     @PostMapping("/{postId}/delete")
-    public String deletePost(@PathVariable Long postId) {
+    public ResponseEntity deletePost(@PathVariable Long postId) {
         postService.deletePost(postId);
-        return "delete ok";
+        return new ResponseEntity("post delete successful", HttpStatus.OK);
     }
 
     //ResponseEntity로 결과 알려주기.
     @PostMapping("/{postId}/update")
-    public String updatePost(@PathVariable Long postId, @RequestBody PostDTO postDTO) {
+    public ResponseEntity updatePost(@PathVariable Long postId, @RequestBody PostDTO postDTO) {
         postService.updatePost(postId, postDTO);
-        return "update ok";
+        return new ResponseEntity("post update successful", HttpStatus.OK);
     }
 }
