@@ -30,6 +30,7 @@ public class PostService {
     private final TagRepository tagRepository;
     private final PostTagRepository postTagRepository;
     private final AccountService accountService;
+    private final Integer commentLength = 35;
 
     //save에서 comment를 받을 필요는 없음. 처음 포스트하는데 댓글이 있을리 없기 때문에.
     public void savePost(PostDTO postDTO, String header) {
@@ -105,7 +106,33 @@ public class PostService {
         for(Post post : posts)
             postDTOS.add(postDTOMapper(post));
 
+        postDTOS = contentSplit(postDTOS);
+
         return new CursorPage<>(postDTOS, hasNext(lastId, boardType));
+    }
+
+    /** 내용 원하는 길이만큼 잘라서 주기
+     * 이것도 생각해보면 우리가 굳이 해줄 필요가 있나 생각이 들긴한다.
+     * 서버에서 잘라주는 것보다는 각자의 핸드폰에서 자르는 게 더 효율적이기 때문에.
+     * 이거에 대해서도 이야기해보기.
+     * StringBuilder와 StringBuffer사이에서의 고민에서는 multi thread 하는 경우가 생길 거 같아서 Buffer 사용.
+     */
+    private List<PostDTO> contentSplit(List<PostDTO> postDTOS) {
+        StringBuffer st;
+        List<PostDTO> res = new ArrayList<>();
+        for(PostDTO postDTO : postDTOS) {
+            st = new StringBuffer();
+            String content = postDTO.getContent();
+            if(content.length() > commentLength) {
+                st.append(content, 0, commentLength + 1);
+                st.append("...");
+            }
+            else st.append(content);
+
+            postDTO.setContent(st.toString());
+            res.add(postDTO);
+        }
+        return res;
     }
 
     /**
