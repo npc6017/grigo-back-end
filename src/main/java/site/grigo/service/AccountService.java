@@ -219,6 +219,7 @@ public class AccountService implements UserDetailsService {
             Optional<Tag> byName = tagRepository.findByName(tag);
             tags.add(byName.get());
         }
+        
         return tags;
     }
 }
