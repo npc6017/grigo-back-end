@@ -114,4 +114,4 @@
 > >     - PostService
 > >         1. savePost 메서드의 응답 타입 void -> Post로 변경하여 사용  
 > >     - TagService  
-> >         1. saveTags 로직 전체 변경
+> >         1. saveTags 로직 일부 변경
