@@ -12,7 +12,7 @@ import javax.persistence.*;
 @Getter @Setter
 public class Notification {
 
-    @Id @GeneratedValue(strategy = GenerationType.TABLE)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
     @JoinColumn(name = "account_id")
