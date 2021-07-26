@@ -199,8 +199,6 @@ public class AccountService implements UserDetailsService {
 
     /**
      * 알림 읽음 처리
-     * 게시글에 여러 태그가 있을 수 있으니
-     * 하나의 게시글 확인 시, 해당 게시글의 모든 태그 알림 디비 삭제
      * */
     @Transactional /** delete 실행 시 Transaction 필요*/
     public void deleteNotice(Account account, Long postId) {
