@@ -1,33 +1,32 @@
-package site.grigo.domain.accounttag;
+package site.grigo.domain.notification;
 
 import lombok.Getter;
 import lombok.Setter;
 import site.grigo.domain.account.Account;
 import site.grigo.domain.post.Post;
-import site.grigo.domain.tag.Tag;
 
 import javax.persistence.*;
 
-@Getter
-@Setter
+/** Account - Post | 댜대다 관계 */
 @Entity
-public class AccountTag {
+@Getter @Setter
+public class Notification {
+
     @Id @GeneratedValue(strategy = GenerationType.TABLE)
     private Long id;
     @ManyToOne
     @JoinColumn(name = "account_id")
     private Account account;
     @ManyToOne
-    @JoinColumn(name = "tag_id")
-    private Tag tag;
+    @JoinColumn(name = "post_id")
+    private Post post;
 
-    public AccountTag(){
-
+    public Notification(Account account, Post post) {
+        this.account = account;
+        this.post = post;
     }
 
-    /**  ++ */
-    public AccountTag(Account account, Tag saveTag) {
-        this.account = account;
-        this.tag = saveTag;
+    public Notification() {
+
     }
 }

@@ -4,7 +4,9 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import site.grigo.domain.accounttag.AccountTag;
 import site.grigo.domain.comment.Comment;
+import site.grigo.domain.notification.Notification;
 import site.grigo.domain.post.Post;
 
 import javax.persistence.*;
@@ -26,12 +28,21 @@ public class Account implements UserDetails {
     private String password;
     private String sex;
 
-   /** Account - Post | 1대다 관계 설정 */
+    /** 새로운 알림 확인 여부 false = 읽을 알림 없음 , true = 읽을 알림 존재*/
+    private boolean checkNotice = false;
+
+    /** Account - Post | 1대다 관계 설정 */
     @OneToMany(mappedBy = "account")
     private List<Post> posts = new ArrayList<>();
     /** Account - Comment | 1대다 관계 설정 */
     @OneToMany(mappedBy = "account")
     private List<Comment> comments = new ArrayList<>();
+    /** Account - Post -> Notification | 다대다 관계 설정 ++*/
+    @OneToMany(mappedBy = "account")
+    private List<Notification> notifications = new ArrayList<>();
+    /** Account - Tag | 다대다 관계 설정 ++*/
+    @OneToMany(mappedBy = "account")
+    private List<AccountTag> tags = new ArrayList<>();
 
     public Account() {
     }

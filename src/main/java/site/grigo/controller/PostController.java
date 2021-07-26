@@ -7,7 +7,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import site.grigo.domain.post.CursorPage;
+import site.grigo.domain.post.Post;
 import site.grigo.domain.post.PostDTO;
+import site.grigo.service.AccountService;
 import site.grigo.service.PostService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 public class PostController {
     private static final int DEFAULT_SIZE = 10;
     private final PostService postService;
+    private final AccountService accountService;
 
     /**
      * 시작하는 postId와 한 페이지당 들어가야할 size를 입력받는다.
@@ -47,9 +50,18 @@ public class PostController {
     }
 
     //ResponseEntity로 결과 알려주기.
+    /**
+     * 토큰 token으로 빼내어 재사용. */
     @PostMapping("/save")
     public ResponseEntity savePost(HttpServletRequest request, @RequestBody PostDTO postDTO) {
-        postService.savePost(postDTO, request.getHeader("Authorization"));
+        /* 게시글 생성 */
+        String token = request.getHeader("Authorization");
+        Post post = postService.savePost(postDTO, token);
+
+        /** 태그가 있는 경우 알림 생성 */
+        if(!postDTO.getTag().isEmpty())
+            accountService.setNotification(post, postDTO);
+
         return new ResponseEntity("post save successful", HttpStatus.OK);
     }
 

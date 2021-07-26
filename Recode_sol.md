@@ -91,3 +91,27 @@
 > >    - Post
 > >     1. Post - Account 다대1 관계 설정
 > >     2. Post - Comment | 1대다 관계 설정
+> ## 7월 26일 (월)
+> > ### 구현
+> > - Account - Tag 다대다 관계 설정  
+> > - Account - Post 다대다(Notification) 관계 설정
+> > - Notification 기능 구현
+>
+> > - controller 패키지
+> >     - AccountController  
+> >         1. Notification 갱신 및 읽음 요청 처리 구현 
+> >     - PostController  
+> >         1. savePost 메서드에서 태그가 존재하는 경우, 알림 생성 로직 추가 
+> > - domain 패키지  
+> >     - Account, AccountTag, Notification, Tag
+> >         1. Account - Post -> Notification | 다대다 관계 설정
+> >         2. Account - Tag 다대다 관계 설정
+> >         3. NotificationDTO(id, postId, tag(string)) 생성  
+> > - service 패키지
+> >     - AccountService
+> >         1. 알림 생성 setNotification 메서드 구현
+> >         2. 알림 읽음 처리 deleteNotice 메서드 구현
+> >     - PostService
+> >         1. savePost 메서드의 응답 타입 void -> Post로 변경하여 사용  
+> >     - TagService  
+> >         1. saveTags 로직 전체 변경

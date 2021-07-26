@@ -33,7 +33,8 @@ public class PostService {
     private final Integer contentLength = 35;
 
     //save에서 comment를 받을 필요는 없음. 처음 포스트하는데 댓글이 있을리 없기 때문에.
-    public void savePost(PostDTO postDTO, String header) {
+    /** void -> Post */
+    public Post savePost(PostDTO postDTO, String header) {
         Account account = accountService.getAccountToToken(header);
         // 받은 tag이름을 tag에서 가져오는 과정.
         List<Tag> tags = extractTags(postDTO.getTag());
@@ -44,6 +45,8 @@ public class PostService {
         // tag와 post를 postTag로 저장하는 과정.
         for(Tag tag : tags)
             postTagRepository.save(new PostTag(save, tag));
+
+        return save;
     }
 
     private List<Tag> extractTags(List<String> tagsFromDto) {
