@@ -43,6 +43,7 @@ public class Post {
 
     }
 
+
     public Post(String title, Account account, String content, String boardType) {
         this.title = title;
         this.account = account;

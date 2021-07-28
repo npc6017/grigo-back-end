@@ -10,6 +10,7 @@ public class CommentDTO {
     private Long id;
     private String content;
     private LocalDateTime timeStamp;
+    private boolean userCheck = false;
 
     public CommentDTO(Long id, String content, LocalDateTime timeStamp) {
         this.id = id;

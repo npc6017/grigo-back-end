@@ -18,6 +18,17 @@ public class PostDTO {
     private List<String> tag = new ArrayList<>();
     private List<CommentDTO> comments = new ArrayList<>();
     private LocalDateTime timeStamp;
+    private boolean userCheck = false;
+
+    public PostDTO(Long id, String title, String writer, String content, String boardType, List<String> tag, LocalDateTime timeStamp) {
+        this.id = id;
+        this.title = title;
+        this.writer = writer;
+        this.content = content;
+        this.boardType = boardType;
+        this.tag = tag;
+        this.timeStamp = timeStamp;
+    }
 
     public PostDTO(Long id, String title, String writer, String content, String boardType, List<String> tags, List<CommentDTO> comments, LocalDateTime timeStamp) {
         this.id = id;

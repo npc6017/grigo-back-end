@@ -38,8 +38,9 @@ public class PostController {
 
     // post 선택했을 때, 가져오는 메소드.
     @GetMapping("/{postId}")
-    public PostDTO selectPost(@PathVariable Long postId) {
-        return postService.servePost(postId);
+    public PostDTO selectPost(HttpServletRequest request, @PathVariable Long postId) {
+        String token = request.getHeader("Authorization");
+        return postService.servePost(postId, token);
     }
 
     //ResponseEntity로 결과 알려주기.
