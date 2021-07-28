@@ -29,18 +29,11 @@ public class PostController {
      * pogeRequest는 페이지를 만들어주는 역할을 한다.
      * pogeRequest.of(0, size)의 의미는 0번부터 페이지를 만들어서 넘긴다는 의미이다.
      */
-    @GetMapping("/free")
-    public CursorPage freeBoard(@RequestParam(value = "id") Long id, @RequestParam(value = "size") Integer size){
-        System.out.println(id + "  " + size);
-        if(size == null) size = DEFAULT_SIZE;
-        return postService.get(id, PageRequest.of(0, size), "free");
-    }
 
-    @GetMapping("/question")
-    public CursorPage questionBoard(@RequestParam(value = "id") Long id, @RequestParam(value = "size") Integer size) {
-        System.out.println(id + "  " + size);
+    @GetMapping("/board")
+    public CursorPage board(@RequestParam(value = "id") Long id, @RequestParam(value = "size") Integer size, @RequestParam(value = "type") String type) {
         if(size == null) size = DEFAULT_SIZE;
-        return postService.get(id, PageRequest.of(0, size), "question");
+        return postService.get(id, PageRequest.of(0, size), type);
     }
 
     // post 선택했을 때, 가져오는 메소드.
