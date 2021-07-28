@@ -2,6 +2,7 @@ package site.grigo.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.WebDataBinder;
@@ -10,6 +11,9 @@ import site.grigo.domain.account.Account;
 import site.grigo.domain.ResponseDTO;
 import site.grigo.domain.account.SignUpJson;
 import site.grigo.domain.account.*;
+import site.grigo.domain.notification.Notification;
+import site.grigo.domain.notification.NotificationDTO;
+import site.grigo.domain.notification.NotificationRepository;
 import site.grigo.error.exception.EntityNotFoundException;
 import site.grigo.jwt.JwtProvider;
 import site.grigo.service.AccountService;
@@ -18,6 +22,9 @@ import site.grigo.validator.SignUpValidator;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -28,6 +35,8 @@ public class AccountController {
     private final JwtProvider jwtProvider;
 
     private final SignUpValidator signUpValidator; // 이메일 검증 객체
+
+    private final NotificationRepository notificationRepository;
 
     /**
      * SignUpJson으로 파리미터가 들어오는 경우, 검증
@@ -82,9 +91,13 @@ public class AccountController {
             String token = jwtProvider.createToken(account);
             response.setHeader("Authorization", "bearer " + token);
 
+            /** ++ */
+            // 만든 토큰으로 DB에서 Account 가져오기
+            Account getAccount = accountService.getAccountToToken("bearer " + token);
+
             //profileDTO 만들어오기
             ProfileDTO profile = accountService.getProfileFromEmail(account.getEmail());
-            profile.setTags(accountService.getAccountTagsFromEmailToString(account.getEmail()));
+            profile.setTags(accountService.getAccountTagsFromAccountToString(getAccount)); /** ++ */
 
             //만약 태그에 데이터가 존재한다면 상태코드 213
             if(!profile.getTags().isEmpty()) response.setStatus(213);
@@ -132,5 +145,34 @@ public class AccountController {
 
     /* TODO TAG UPDATE */
 
+    /** 알림 갱신 요청 */
+    @GetMapping("/notification")
+    public List<NotificationDTO> getNotification(HttpServletRequest request) {
+        List<NotificationDTO> notificationDTOS = new ArrayList<>();
+        String token = request.getHeader("Authorization");
+        Account account = accountService.getAccountToToken(token);
+        // 본인에게 해당되는 Notification 모두 가져오기
+        Optional<List<Notification>> allNotification = notificationRepository.findAllByAccount(account);
+        // Notification이 비어있는 경우
+        if(allNotification.isEmpty())
+            return notificationDTOS;
+        // 가져온 Notification을 모두 돌며 id, postId, PostTitle로 이루어진 DTO 생성
+        allNotification.get().forEach( notification -> {
+            notificationDTOS.add(new NotificationDTO(
+                    notification.getId(),
+                    notification.getPost().getId(),
+                    notification.getPost().getTitle()));
+        });
+        return notificationDTOS;
+    }
 
+    /** 알림 읽음 요청 */
+    @GetMapping("notification/{postId}")
+    public ResponseEntity readNotification(@PathVariable Long postId, HttpServletRequest request) {
+        String token = request.getHeader("Authorization");
+        Account account = accountService.getAccountToToken(token);
+
+        accountService.deleteNotice(account, postId);
+        return ResponseEntity.ok().body("알림이 읽음 처리 되었습니다.");
+    }
 }

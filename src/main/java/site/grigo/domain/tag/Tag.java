@@ -2,6 +2,7 @@ package site.grigo.domain.tag;
 
 import lombok.Getter;
 import lombok.Setter;
+import site.grigo.domain.accounttag.AccountTag;
 import site.grigo.domain.posttag.PostTag;
 
 import javax.persistence.*;
@@ -19,6 +20,9 @@ public class Tag {
     private String category;
     @OneToMany(mappedBy = "tag")
     private List<PostTag> posts = new ArrayList<>();
+
+    @OneToMany(mappedBy = "tag")
+    private List<AccountTag> accounts = new ArrayList<>();
 
     public Tag(String name, String category) {
         this.name = name;

@@ -7,13 +7,20 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import site.grigo.domain.ResponseDTO;
 import site.grigo.domain.account.*;
 import site.grigo.domain.account.exception.AccountInformationIncorrectException;
 import site.grigo.domain.accounttag.AccountTag;
 import site.grigo.domain.accounttag.AccountTagRepository;
+import site.grigo.domain.notification.Notification;
+import site.grigo.domain.notification.NotificationRepository;
+import site.grigo.domain.post.Post;
+import site.grigo.domain.post.PostDTO;
+import site.grigo.domain.post.PostRepository;
+import site.grigo.domain.posttag.PostTag;
 import site.grigo.domain.tag.Tag;
-import site.grigo.domain.tag.TagDTO;
+import site.grigo.domain.tag.TagRepository;
 import site.grigo.error.exception.EntityNotFoundException;
 import site.grigo.jwt.JwtProvider;
 
@@ -29,6 +36,9 @@ public class AccountService implements UserDetailsService {
     private final PasswordEncoder passwordEncoder; // Password 인코딩
     private final JwtProvider jwtProvider;
     private final AccountTagRepository accountTagRepository;
+    private final PostRepository postRepository; // ++
+    private final NotificationRepository notificationRepository; // ++
+    private final TagRepository tagRepository; // ++
 
     public void join(SignUpJson signUpJson) {
         // 계정 생성
@@ -145,13 +155,71 @@ public class AccountService implements UserDetailsService {
         return profile;
     }
 
-    public List<String> getAccountTagsFromEmailToString(String email) {
+    /** getAccountTagsFromEmailToString -> getAccountTagsFromAccountToString */
+    public List<String> getAccountTagsFromAccountToString(Account account) {
         List<String> res = new ArrayList<>();
-        List<AccountTag> allByEmail = accountTagRepository.findAllByEmail(email);
-        for(AccountTag tag : allByEmail)
-            res.add(tag.getTagName());
+        Optional<List<AccountTag>> allByEmail = accountTagRepository.findAllByAccount(account);
+        for(AccountTag tag : allByEmail.get())
+            res.add(tag.getTag().getName());
         return res;
     }
 
+    /** 알림 생성
+     * @param post
+     * @param token*/
+    public void setNotification(Post post, PostDTO postDTO) {
 
+        // Get Post
+        Optional<Post> getpost = postRepository.findById(post.getId());
+
+        // 태그를 가지고 있는 Account 가져오기
+        List<AccountTag> accountTags = new ArrayList<>();
+        List<Tag> tags = extractTags(postDTO.getTag());
+        tags.forEach(tag -> {
+            Optional<List<AccountTag>> byTagName = accountTagRepository.findByTag(tag);
+            accountTags.addAll(byTagName.get());
+        });
+
+        /** 가져온 모든 Account와 Post 알림 등록
+         * 한 게시글에 유저가 가지고 있는 태그가 2개 이상 등록되어 있는 경우,
+         * 하나의 알림으로 처리하기 위해 중복을 검사하여 처리한다.
+         */
+        accountTags.forEach( accountTag -> {
+            boolean isNotification = notificationRepository.existsByAccountAndPost(accountTag.getAccount(), getpost.get());
+            if(!isNotification)
+                notificationRepository.save(new Notification(accountTag.getAccount(),getpost.get()));
+        });
+
+        // 가져온 모든 Account의 새알림 여부 변경
+        accountTags.forEach( accountTag -> {
+            accountTag.getAccount().setCheckNotice(true);
+            accountRepository.save(accountTag.getAccount());
+        });
+    }
+
+    /**
+     * 알림 읽음 처리
+     * */
+    @Transactional /** delete 실행 시 Transaction 필요*/
+    public void deleteNotice(Account account, Long postId) {
+        Optional<Post> post = postRepository.findById(postId);
+        notificationRepository.deleteAllByAccountAndPost(account, post.get());
+
+        boolean isNotification = notificationRepository.existsByAccount(account);
+        /** 유저가 모든 알림을 읽은 경우 */
+        if(!isNotification) {
+            account.setCheckNotice(false);
+            accountRepository.save(account);
+        }
+    }
+
+    private List<Tag> extractTags(List<String> tagsFromDto) {
+        List<Tag> tags = new ArrayList<>();
+        for(String tag : tagsFromDto) {
+            Optional<Tag> byName = tagRepository.findByName(tag);
+            tags.add(byName.get());
+        }
+        
+        return tags;
+    }
 }
