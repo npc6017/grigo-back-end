@@ -205,7 +205,7 @@ public class PostService {
     }
 
     private CommentDTO commentDTOMapper(Comment comment, Account account) {
-        CommentDTO commentDTO = new CommentDTO(comment.getId(), comment.getContent(), comment.getTimeStamp());
+        CommentDTO commentDTO = new CommentDTO(comment.getId(), comment.getAccount().getName(),comment.getContent(), comment.getTimeStamp());
 
         if(comment.getAccount().equals(account)) commentDTO.setUserCheck(true);
         return commentDTO;
