@@ -40,7 +40,7 @@ public class PostService {
     public Post savePost(PostDTO postDTO, String header) {
         Account account = accountService.getAccountToToken(header);
         // 받은 tag이름을 tag에서 가져오는 과정.
-        List<Tag> tags = extractTags(postDTO.getTag());
+        List<Tag> tags = extractTags(postDTO.getTags());
 
         // post를 저장하는 과정.
         Post save = postRepository.save(postMapper(postDTO, account));
@@ -75,7 +75,7 @@ public class PostService {
     // update할 때, tag가 바뀐다면? 어떻게 해줘야할까
     public void updatePost(Long postId, PostDTO postDTO, String header) {
         Account account = accountService.getAccountToToken(header);
-        List<Tag> tags = extractTags(postDTO.getTag());
+        List<Tag> tags = extractTags(postDTO.getTags());
         Post post = postRepository.getById(postId);
 
         // 로그인한 계정과 post의 작성자가 동일한지 확인. 아니면 exception 발생.
@@ -208,7 +208,8 @@ public class PostService {
     }
 
     private CommentDTO commentDTOMapper(Comment comment, Account account) {
-        CommentDTO commentDTO = new CommentDTO(comment.getId(), comment.getAccount().getName(),comment.getContent(), comment.getTimeStamp());
+        CommentDTO commentDTO = new CommentDTO(comment.getId(), comment.getContent(), comment.getAccount().getName(), comment.getTimeStamp());
+        System.out.println(commentDTO.getContent() + " " + comment.getAccount().getName());
 
         if(comment.getAccount().equals(account)) commentDTO.setUserCheck(true);
         return commentDTO;

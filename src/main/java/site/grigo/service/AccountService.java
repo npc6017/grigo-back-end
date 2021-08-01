@@ -174,7 +174,7 @@ public class AccountService implements UserDetailsService {
 
         // 태그를 가지고 있는 Account 가져오기
         List<AccountTag> accountTags = new ArrayList<>();
-        List<Tag> tags = extractTags(postDTO.getTag());
+        List<Tag> tags = extractTags(postDTO.getTags());
         tags.forEach(tag -> {
             Optional<List<AccountTag>> byTagName = accountTagRepository.findByTag(tag);
             accountTags.addAll(byTagName.get());
