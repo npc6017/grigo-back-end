@@ -91,6 +91,9 @@ public class PostService {
             postTagRepository.delete(existTag);
         for (Tag updateTag : tags)
             postTagRepository.save(new PostTag(post, updateTag));
+
+        /** 08.01 수정  */
+        postRepository.save(post);
     }
 
     //존재하는지 확인하고, 없으면 예외.
