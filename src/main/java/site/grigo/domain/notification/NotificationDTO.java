@@ -8,11 +8,11 @@ public class NotificationDTO {
 
     private Long id;
     private Long postId;
-    private String tag;
+    private String title;
 
-    public NotificationDTO(Long id, Long postId, String tag) {
+    public NotificationDTO(Long id, Long postId, String title) {
         this.id = id;
         this.postId = postId;
-        this.tag = tag;
+        this.title = title;
     }
 }
