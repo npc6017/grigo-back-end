@@ -123,7 +123,7 @@ public class AccountController {
         return profile;
     }
 
-    /** 프로필 수정(Birth, Phone)*/
+    /** 프로필 수정(Birth, Phone, tags)*/
     @PostMapping("/settings/profile")
     public ProfileDTO updateProfile(@RequestBody ProfileDTO profile, HttpServletRequest request) {
         String header = request.getHeader("Authorization");

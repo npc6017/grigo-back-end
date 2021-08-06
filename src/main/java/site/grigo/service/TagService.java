@@ -57,6 +57,12 @@ public class TagService {
         }
     }
 
+    public void updateTags(String token, List<String> tags) {
+        token = jwtProvider.resolveToken(token);
+        String userEmail = jwtProvider.getUserEmail(token);
+        Optional<Account> account = accountRepository.findByEmail(userEmail);
+    }
+
     private void checkAndSave(Optional<Account> account, AccountTag accountTags, Tag tag) {
         accountTags.setAccount(account.get());
         accountTags.setTag(tag);

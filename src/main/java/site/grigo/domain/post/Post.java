@@ -30,7 +30,7 @@ public class Post {
     private String boardType;
 
     @OneToMany(mappedBy = "post")
-    private List<PostTag> tag = new ArrayList<>();
+    private List<PostTag> tags = new ArrayList<>();
     /** Post - Comment | 1대다 관계 설정 */
     @OneToMany(mappedBy = "post")
     private List<Comment> comments = new ArrayList<>();

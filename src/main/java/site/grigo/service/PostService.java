@@ -86,7 +86,9 @@ public class PostService {
 
         // 애플리케이션 단에서 삭제되고 추가되는 데이터들을 받은 후에, 그에 맞게 업데이트하기.
         // -> 로직 변경. 현준&현배와 이야기하기.
-        List<PostTag> tag = post.getTag();
+
+
+        List<PostTag> tag = post.getTags();
         for (PostTag existTag : tag)
             postTagRepository.delete(existTag);
         for (Tag updateTag : tags)
@@ -174,7 +176,7 @@ public class PostService {
         List<String> tags = new ArrayList<>();
 
         // post에 속한 태그들 dto로 변환
-        for (PostTag tag : post.getTag())
+        for (PostTag tag : post.getTags())
             tags.add(tag.getTag().getName());
 
         return new PostDTO(post.getId(), post.getTitle(), post.getAccount().getName(), post.getContent(), post.getBoardType(), tags, post.getTimeStamp());
@@ -190,7 +192,7 @@ public class PostService {
         List<CommentDTO> commentDTOS = new ArrayList<>();
 
         // post에 속한 태그들 dto로 변환
-        for (PostTag tag : post.getTag())
+        for (PostTag tag : post.getTags())
             tags.add(tag.getTag().getName());
 
         // post에 속한 comment들 dto로 변환
