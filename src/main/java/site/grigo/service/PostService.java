@@ -75,7 +75,8 @@ public class PostService {
     // update할 때, tag가 바뀐다면? 어떻게 해줘야할까
     public void updatePost(Long postId, PostDTO postDTO, String header) {
         Account account = accountService.getAccountToToken(header);
-        List<Tag> tags = extractTags(postDTO.getTag());
+        List<Tag> deleteTags = extractTags(postDTO.getDeleteTags());
+        List<Tag> addTags = extractTags(postDTO.getAddTags());
         Post post = postRepository.getById(postId);
 
         // 로그인한 계정과 post의 작성자가 동일한지 확인. 아니면 exception 발생.
@@ -87,12 +88,14 @@ public class PostService {
         // 애플리케이션 단에서 삭제되고 추가되는 데이터들을 받은 후에, 그에 맞게 업데이트하기.
         // -> 로직 변경. 현준&현배와 이야기하기.
 
-
-        List<PostTag> tag = post.getTags();
-        for (PostTag existTag : tag)
-            postTagRepository.delete(existTag);
-        for (Tag updateTag : tags)
-            postTagRepository.save(new PostTag(post, updateTag));
+        //무조건 존재하는 것일 수 밖에 없다.
+        //이런 조건은 좀 불확실한가 ? -> 생각해볼 문제
+        for(Tag tag : deleteTags) {
+            PostTag postTagByPostAndTag = postTagRepository.findPostTagByPostAndTag(post, tag);
+            postTagRepository.delete(postTagByPostAndTag);
+        }
+        for(Tag tag : addTags)
+            postTagRepository.save(new PostTag(post, tag));
     }
 
     //존재하는지 확인하고, 없으면 예외.
