@@ -17,6 +17,8 @@ public class PostDTO {
     private String boardType;
     private List<String> tags = new ArrayList<>();
     private List<CommentDTO> comments = new ArrayList<>();
+    private List<String> addTags = new ArrayList<>();
+    private List<String> deleteTags = new ArrayList<>();
     private LocalDateTime timeStamp;
     private boolean userCheck = false;
 

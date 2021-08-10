@@ -18,7 +18,6 @@ import site.grigo.domain.notification.NotificationRepository;
 import site.grigo.domain.post.Post;
 import site.grigo.domain.post.PostDTO;
 import site.grigo.domain.post.PostRepository;
-import site.grigo.domain.posttag.PostTag;
 import site.grigo.domain.tag.Tag;
 import site.grigo.domain.tag.TagRepository;
 import site.grigo.error.exception.EntityNotFoundException;
@@ -101,15 +100,39 @@ public class AccountService implements UserDetailsService {
     }
 
 
-    /** User Info Update : Phone, Birth */
+    /** User Info Update : Phone, Birth
+     * 리팩토 해야하는 것 :
+     * */
     public ProfileDTO updateProfile(String header, ProfileDTO profile) {
         Account account = getAccountToToken(header);
 
         // 수정 및 반영
-        account.setPhone(profile.getPhone());
-        account.setBirth(profile.getBirth());
+        if(profile.getPhone() != null)
+            account.setPhone(profile.getPhone());
+        if(profile.getBirth() != null)
+            account.setBirth(profile.getBirth());
         accountRepository.save(account);
 
+        // account의 tag 업데이트 하기.
+        // 삭제하고.
+        List<Tag> updateTags;
+        if(profile.getDeleteTags() != null){
+            updateTags = extractTags(profile.getDeleteTags());
+            for (Tag delete : updateTags) {
+                AccountTag byAccountAndTag = accountTagRepository.findByAccountAndTag(account, delete);
+                accountTagRepository.delete(byAccountAndTag);
+            }
+        }
+
+        //추가해줌.
+        if(profile.getAddTags() != null) {
+            log.info("{}", profile.getAddTags());
+            updateTags = extractTags(profile.getAddTags());
+            for (Tag add : updateTags) {
+                AccountTag accountTag = new AccountTag(account, add);
+                accountTagRepository.save(accountTag);
+            }
+        }
         // ProfileDTO 생성 및 반환
         return makeProfileDTO(account);
     }
@@ -152,6 +175,7 @@ public class AccountService implements UserDetailsService {
         profile.setSex(account.getSex());
         profile.setName(account.getName());
         profile.setStudent_id(account.getStudentId());
+        profile.setTags(getAccountTagsFromAccountToString(account));
         return profile;
     }
 
@@ -166,7 +190,7 @@ public class AccountService implements UserDetailsService {
 
     /** 알림 생성
      * @param post
-     * @param token*/
+     * */
     public void setNotification(Post post, PostDTO postDTO) {
 
         // Get Post
@@ -217,7 +241,13 @@ public class AccountService implements UserDetailsService {
         List<Tag> tags = new ArrayList<>();
         for(String tag : tagsFromDto) {
             Optional<Tag> byName = tagRepository.findByName(tag);
-            tags.add(byName.get());
+            if(!byName.isPresent()) {
+                Tag newTag = new Tag(tag);
+                tagRepository.save(newTag);
+                log.info("{}", newTag);
+                tags.add(newTag);
+            }
+            else tags.add(byName.get());
         }
         
         return tags;

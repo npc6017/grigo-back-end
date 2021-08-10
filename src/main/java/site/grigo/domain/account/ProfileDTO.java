@@ -20,8 +20,9 @@ public class ProfileDTO {
     private String birth;
     private String sex;
     // Account tag를 바로쓰는 것 역시 안좋다고 했으니 이를 개선하는 게 좋을 것 같고,
-    //
     private List<String> tags;
+    private List<String> addTags;
+    private List<String> deleteTags;
 
     public ProfileDTO() {
     }

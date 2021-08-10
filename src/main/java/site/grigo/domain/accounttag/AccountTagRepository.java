@@ -19,4 +19,6 @@ public interface AccountTagRepository extends JpaRepository<AccountTag, Long> {
     AccountTag findByAccount(Account account);
 
     boolean existsByAccountAndTag(Account account, Tag tag);
+
+    AccountTag findByAccountAndTag(Account account, Tag tag);
 }
