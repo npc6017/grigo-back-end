@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import site.grigo.domain.account.Account;
 import site.grigo.domain.comment.Comment;
 import site.grigo.domain.comment.CommentDTO;
@@ -73,6 +74,7 @@ public class PostService {
     }
 
     // update할 때, tag가 바뀐다면? 어떻게 해줘야할까
+    @Transactional
     public void updatePost(Long postId, PostDTO postDTO, String header) {
         Account account = accountService.getAccountToToken(header);
         List<Tag> deleteTags = extractTags(postDTO.getDeleteTags());
