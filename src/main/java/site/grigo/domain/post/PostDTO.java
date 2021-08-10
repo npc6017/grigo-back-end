@@ -15,7 +15,7 @@ public class PostDTO {
     private String writer;
     private String content;
     private String boardType;
-    private List<String> tag = new ArrayList<>();
+    private List<String> tags = new ArrayList<>();
     private List<CommentDTO> comments = new ArrayList<>();
     private List<String> addTags = new ArrayList<>();
     private List<String> deleteTags = new ArrayList<>();
@@ -28,7 +28,7 @@ public class PostDTO {
         this.writer = writer;
         this.content = content;
         this.boardType = boardType;
-        this.tag = tag;
+        this.tags = tag;
         this.timeStamp = timeStamp;
     }
 
@@ -38,7 +38,7 @@ public class PostDTO {
         this.writer = writer;
         this.content = content;
         this.boardType = boardType;
-        this.tag = tags;
+        this.tags = tags;
         this.comments = comments;
         this.timeStamp = timeStamp;
     }

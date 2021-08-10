@@ -53,7 +53,7 @@ public class PostController {
         Post post = postService.savePost(postDTO, token);
 
         /** 태그가 있는 경우 알림 생성 */
-        if(!postDTO.getTag().isEmpty())
+        if(!postDTO.getTags().isEmpty())
             accountService.setNotification(post, postDTO);
 
         return new ResponseEntity("post save successful", HttpStatus.OK);

@@ -15,8 +15,8 @@ public class CommentDTO {
 
     public CommentDTO(Long id, String content, String writer ,LocalDateTime timeStamp) {
         this.id = id;
-        this.writer = writer;
         this.content = content;
+        this.writer = writer;
         this.timeStamp = timeStamp;
     }
     public CommentDTO() {
