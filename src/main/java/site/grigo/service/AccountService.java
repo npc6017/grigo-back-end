@@ -82,9 +82,8 @@ public class AccountService implements UserDetailsService {
     private boolean checkPassword(String email, String password) {
         UserDetails account = accountRepository.findByEmail(email).get();
 
+        log.info("pass : {}, saved pass : {}", password, account.getPassword());
         if (passwordEncoder.matches((CharSequence) password, account.getPassword())) return true;
-        log.info("pass : {}, saved pass : {}", password, accountRepository.findByEmail(email).get().getPassword());
-        //if(password.equals(accountRepository.findByEmail(email).get().getPassword())) return true;
         throw new AccountInformationIncorrectException("password is incorrect");
     }
 

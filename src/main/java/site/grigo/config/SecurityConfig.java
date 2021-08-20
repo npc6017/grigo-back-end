@@ -34,14 +34,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
+                //.anyRequest().authenticated()
                 .antMatchers(
                         "/login",
                         "/join"
                 )
-                .permitAll()
-                .anyRequest().authenticated()
+                .anonymous()
                 .and()
-                .addFilterBefore(new JwtAuthenticationFilter(jwtProvider),
+                .addFilterAfter(new JwtAuthenticationFilter(jwtProvider),
                         UsernamePasswordAuthenticationFilter.class);
     }
 }

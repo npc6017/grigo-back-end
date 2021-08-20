@@ -60,6 +60,7 @@ public class PostController {
     }
 
     //ResponseEntity로 결과 알려주기.
+    // 댓글있는 거 삭제가 안됨
     @PostMapping("/{postId}/delete")
     public ResponseEntity deletePost(HttpServletRequest request, @PathVariable Long postId) {
         postService.deletePost(postId, request.getHeader("Authorization"));
