@@ -32,16 +32,16 @@ public class Account implements UserDetails {
     private boolean checkNotice = false;
 
     /** Account - Post | 1대다 관계 설정 */
-    @OneToMany(mappedBy = "account")
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
     private List<Post> posts = new ArrayList<>();
     /** Account - Comment | 1대다 관계 설정 */
-    @OneToMany(mappedBy = "account")
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
     /** Account - Post -> Notification | 다대다 관계 설정 ++*/
-    @OneToMany(mappedBy = "account")
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
     private List<Notification> notifications = new ArrayList<>();
     /** Account - Tag | 다대다 관계 설정 ++*/
-    @OneToMany(mappedBy = "account")
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
     private List<AccountTag> tags = new ArrayList<>();
 
     public Account() {

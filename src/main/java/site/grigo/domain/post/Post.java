@@ -28,10 +28,10 @@ public class Post {
     private String content;
     private String boardType;
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<PostTag> tags = new ArrayList<>();
     /** Post - Comment | 1대다 관계 설정 */
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
 
     @CreationTimestamp
