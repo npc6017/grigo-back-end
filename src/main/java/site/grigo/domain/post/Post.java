@@ -5,6 +5,7 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import site.grigo.domain.account.Account;
 import site.grigo.domain.comment.Comment;
+import site.grigo.domain.notification.Notification;
 import site.grigo.domain.posttag.PostTag;
 
 import javax.persistence.*;
@@ -34,6 +35,8 @@ public class Post {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
 
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private List<Notification> notifications = new ArrayList<>();
     @CreationTimestamp
     private LocalDateTime timeStamp;
 
